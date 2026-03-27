@@ -13,6 +13,11 @@
   --text:  #fff;
   --text2: #ff0000; /* probs for imporant stuff */
   --spotify: #00ff0d;
+  --vsrg:  #b266ff;
+  --osu:   #ffc3d9;
+  --gold:  #ffd700;
+  --silver: #c0c0c0;
+  --bronze: #cd7f32;
   --dim:   #666;
   --font:  'Courier New', 'Consolas', monospace;
 }
@@ -132,6 +137,10 @@ ol li::before {
   content: counter(plays) '. ';
   color: var(--dim);
 }
+
+ol li:nth-child(1)::before { color: var(--gold); }
+ol li:nth-child(2)::before { color: var(--silver); }
+ol li:nth-child(3)::before { color: var(--bronze); }
 
 a {
   color: var(--text);
