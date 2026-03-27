@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>reans page</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- tf are you doing here lol go away -->
+
+	<div class="page">
+
+		<header class="hero">
+			<h1><a href="#" id="hero-link">rean</a></h1>
+		</header>
+
+
+		<nav class="tabs">
+			<button class="tab active" data-tab="socials">socials</button>
+			<button class="tab" data-tab="projects">projects</button>
+			<button class="tab" data-tab="goals">goals</button>
+			<button class="tab" data-tab="gym">gym</button>
+			<button class="tab" data-tab="mind">mind</button>
+			<button class="tab" data-tab="games">vsrg</button>
+			<button class="tab" data-tab="spotify">spotify</button>
+		</nav>
+
+		<main class="content">
+            <!-- this isnt a CTF hackerman, go away -->
+			<!--about me-->
+			<section id="about" class="tab-content">
+				<p> hey, i'm rean 
+                    <i class="dim"> (allias: sojumilk, milkwatcher, adalvr)</i>
+                    <br>
+                    i am 19 (23.08), filipino-irish, <br>
+                    i am a software dev student at SETU,<br>
+                    i love my gf <3
+
+			</section>
+
+			<!--tabs-->
+			<section id="socials" class="tab-content active">
+				<ul>
+					<li><a href="https://github.com/MilkWatcher">github</a></li>
+					<li><a href="https://www.twitch.tv/s0jumilk">twitch // i stream like sometimes</a></li>
+					<li><a href="https://www.youtube.com/@milkwatcher">youtube</a></li>
+				</ul>
+			</section>
+
+			<!--stuff i b buildin -->
+			<section id="projects" class="tab-content">
+				<ul>
+					<li>project one — description</li>
+					<li>project two — description</li>
+				</ul>
+			</section>
+
+			<!--goals-->
+			<section id="goals" class="tab-content">
+				<ul>
+					<li>[x] create personal website</li>
+                    <li>[ ] get drivers license</li>
+                    <li>[ ] internship</li>
+                    <li>[ ] 1k subs on yt</li>
+                    <li>[ ] travel the world with gf</li>
+                    <li>[ ] kill twink rean [65kg](2019 -> x)</li>
+				</ul>
+			</section>
+
+			<!--jim -->
+			<section id="gym" class="tab-content">
+
+				<!-- irl stats lmao -->
+				<p class="gym-stats-line">age: 19 · height: 165.8cm · weight: 51kg <span class="dim">(updated: 26.03.2026)</span></p>
+				<!-- pr from google sheet -->
+				<p class="lined-header">personal records</p>
+				<div id="pr-grid" class="pr-grid">
+					<p class="dim">loading...</p>
+				</div>
+
+				<!-- gym log from google sheet -->
+				<p class="lined-header">log</p>
+				<input type="text" id="gym-search" class="gym-search" placeholder="search (date, exercise, notes...)">
+
+				<div id="gym-log">
+					<p class="dim">loading...</p>
+				</div>
+
+			</section>
+
+			<!--inside my head-->
+			<section id="mind" class="tab-content">
+				<p>i could go for a doner kebab rn</p>
+			</section>
+
+			<!--game stats-->
+			<section id="games" class="tab-content">
+
+                <!-- vsrg -->
+				<p class="lined-header">vsrg</p>
+				<div id="vsrg-stats">
+					<p class="dim">loading...</p>
+				</div>
+
+				<!-- osu!mania -->
+				<p class="lined-header">osu!mania</p>
+				<div id="mania-stats">
+					<p class="dim">loading...</p>
+				</div>
+				<p class="lined-header" style="margin-top: 12px;">top plays</p>
+				<ol id="mania-top">
+					<li class="dim">loading...</li>
+				</ol>
+
+			</section>
+
+			<!--what i be listening to-->
+			<section id="spotify" class="tab-content">
+				<p class="spotify-header">currently listening to:</p>
+				<p id="now-playing" class="dim">loading...</p>
+				<br>
+				<p class="spotify-header">recently played:</p>
+				<ul id="recent-tracks">
+					<li class="dim">loading...</li>
+				</ul>
+			</section>
+
+		</main>
+    <script src="script.js"></script>
+	</div>
+
+</body>
+</html>

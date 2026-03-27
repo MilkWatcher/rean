@@ -1,0 +1,269 @@
+/*
+  === BLACK & WHITE TUI STYLESHEET ===
+
+  CONCEPTS:
+  - Everything is black (#000) and white (#fff). That's it.
+  - Centered layout using flexbox (a CSS layout system).
+  - Tabs use JavaScript to toggle which section is visible.
+  - "display: none" hides an element, "display: block" shows it.
+*/
+
+:root {
+  --bg:    #000;
+  --text:  #fff;
+  --text2: #ff0000; /* probs for imporant stuff */
+  --spotify: #00ff0d;
+  --dim:   #666;
+  --font:  'Courier New', 'Consolas', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.page {
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+}
+
+.hero {
+  margin-bottom: 40px;
+}
+
+.hero h1 {
+  font-size: 24px;
+  font-weight: normal;
+  letter-spacing: 4px;
+  text-transform: lowercase;
+}
+
+.hero h1 a {
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hero h1 a:hover {
+  text-decoration: underline;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 30px;
+  flex-wrap: nowrap;
+}
+
+.tab {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--dim);
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: var(--text);
+  border-color: var(--dim);
+}
+
+.tab.active {
+  color: var(--text);
+  border-color: var(--text);
+}
+
+/* tab content hidden by default, shown when active */
+.tab-content {
+  display: none;
+  text-align: left;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Fixed height prevents tabs from jumping when switching sections */
+.content {
+  min-height: 350px;
+}
+
+/* LISTS */
+ul {
+  list-style: none;
+}
+
+li {
+  padding: 4px 0;
+}
+
+/* Numbered lists (top plays) */
+ol {
+  list-style: none;
+  counter-reset: plays;
+}
+
+ol li {
+  counter-increment: plays;
+}
+
+ol li::before {
+  content: counter(plays) '. ';
+  color: var(--dim);
+}
+
+a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.dim {
+  color: var(--dim);
+}
+
+/* for spotify */
+.spotify-header {
+  color: var(--spotify);
+}
+
+/* for gym tables and formatted text */
+pre {
+  font-family: var(--font);
+  font-size: 13px;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* GYM SECTION */
+.lined-header {
+  color: var(--text);
+  margin-top: 16px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--dim);
+  padding-bottom: 4px;
+}
+
+/* Stats on one line */
+.gym-stats-line {
+  margin-bottom: 8px;
+  color: var(--dim);
+}
+
+/* PR grid — two lists side by side */
+.pr-grid {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 8px;
+}
+
+.pr-grid ul {
+  flex: 1;
+}
+
+.pr-grid li {
+  padding: 1px 0;
+}
+
+/* Search bar for gym log */
+.gym-search {
+  width: 100%;
+  background: none;
+  border: 1px solid var(--dim);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  outline: none;
+}
+
+.gym-search::placeholder {
+  color: var(--dim);
+}
+
+.gym-search:focus {
+  border-color: var(--text);
+}
+
+/* Scrollable log area for many entries */
+#gym-log {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.gym-day {
+  margin-bottom: 4px;
+  border: 1px solid var(--dim);
+  padding: 6px 10px;
+}
+
+.gym-day summary {
+  cursor: pointer;
+  color: var(--text);
+  list-style: none;
+}
+
+.gym-day summary::before {
+  content: '+ ';
+  color: var(--dim);
+}
+
+.gym-day[open] summary::before {
+  content: '- ';
+}
+
+.gym-day ul {
+  margin-top: 6px;
+  padding-left: 16px;
+}
+
+.gym-note {
+  color: var(--dim);
+  font-style: italic;
+  margin-top: 6px;
+}
+
+/* Hidden by search filter */
+.gym-day.hidden {
+  display: none;
+}
+
+@media (max-width: 500px) {
+  body {
+    font-size: 12px;
+  }
+
+  .hero h1 {
+    font-size: 20px;
+  }
+
+  .tab {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+}
