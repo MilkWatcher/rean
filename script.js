@@ -1,3 +1,10 @@
+// last updated date
+const lastUpdatedEl = document.getElementById('last-updated');
+if (lastUpdatedEl) {
+  const d = new Date(document.lastModified);
+  lastUpdatedEl.textContent = d.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '.');
+}
+
 const tabs = document.querySelectorAll('.tab');
 const contents = document.querySelectorAll('.tab-content');
 

@@ -70,6 +70,11 @@ body {
   text-decoration: underline;
 }
 
+.last-updated {
+  font-size: 10px;
+  margin-top: 4px;
+}
+
 .tabs {
   display: flex;
   justify-content: center;
