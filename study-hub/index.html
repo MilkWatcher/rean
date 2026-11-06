@@ -438,7 +438,7 @@ function renderToday(){
   } else if (main.night){
     const nt = main.night, tot = nt.blocks.reduce((s,b) => s+b[1], 0);
     h = '<div class="eyebrow k-cram"><i class="dot"></i>Tonight · '+nt.label+' · '+tot+' min</div><h2>'+(nt.n===5?"Test night":"Night "+nt.n+": "+nt.focus)+'</h2>'
-      + '<p class="sub">Notes in the '+a("cram notes",DOC.cramNotes)+', problems and hints in the '+a("practice tests",DOC.cramTests)+', and log results in the '+a("tracker",DOC.tracker)+'.</p>'
+      + '<p class="sub">Stuck on a problem? Open the '+'<a href="walkthroughs.html">C++ walkthroughs</a>'+'. Notes in the '+a("cram notes",DOC.cramNotes)+', problems and hints in the '+a("practice tests",DOC.cramTests)+', and log results in the '+a("tracker",DOC.tracker)+'.</p>'
       + ticksHTML(nt.items, "today");
   } else if (main.day1){
     h = '<div class="eyebrow k-day1"><i class="dot"></i>Today · '+short(t)+'</div><h2>Day 1: full study day</h2><p class="sub">The hour-by-hour schedule is under '+'<a href="#plan">Plans &amp; checklists</a>. Tick these off as you go.</p>'+ticksHTML(DAY1_CHECKS,"today");
@@ -516,7 +516,7 @@ document.getElementById("cal").addEventListener("click", e => {
 function renderPlan(){
   const cramKeys = nt => nt.items.map(i=>i.k).join(",");
   let h = '<div class="card k-cram"><div class="eyebrow"><i class="dot"></i>Phase 1 · Thu 5 – Mon 9 Nov</div><h2 style="margin-bottom:6px">Susquehanna cram</h2>'
-    + '<p class="muted" style="margin:0 0 10px">Night study only. Full notes in the '+a("cram notes",DOC.cramNotes)+'; log every problem in the '+a("tracker",DOC.tracker)+'.</p>';
+    + '<p class="muted" style="margin:0 0 10px">Night study only. Step-by-step C++ for every problem in the '+'<a href="walkthroughs.html">C++ walkthroughs</a>'+'. Full notes in the '+a("cram notes",DOC.cramNotes)+'; log every problem in the '+a("tracker",DOC.tracker)+'.</p>';
   NIGHTS.forEach(nt => {
     h += '<details'+(nt.date===todayISO()?" open":"")+'><summary><b>'+nt.label+'</b><span>'+(nt.n===5?"Test night":"Night "+nt.n+": "+nt.focus)+'</span><span class="cnt" data-count="'+cramKeys(nt)+'"></span></summary>'+ticksHTML(nt.items,"plan")+'</details>';
   });
@@ -543,6 +543,7 @@ function renderDocs(){
     + items.map(([t,u,kind]) => '<a class="btn" href="'+u+'" target="_blank" rel="noopener">'+t+'<span>'+kind+'</span></a>').join("")+'</div>'+(note?'<p class="note">'+note+'</p>':'')+'</div>';
   let h = '<div class="docs">'
     + grp("Susquehanna assessment","k-cram","Phase 1",[
+        ["C++ Problem Walkthroughs","walkthroughs.html","Page"],
         ["Cram notes",DOC.cramNotes,"Doc","Topic notes and templates for each night, plus test-day rules"],
         ["Practice tests",DOC.cramTests,"Doc","Mini-tests, the Sunday mock, custom problems and hints"],
         ["Cram tracker",DOC.tracker,"Sheet"]], "Tracker tip: set File › Settings › Time zone to Dublin so \"Hours left\" is right.")

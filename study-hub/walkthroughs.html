@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>C++ Problem Walkthroughs</title>
+<style>
+/* Same tokens as the Study Hub: cream light by default, near-black dark via the shared switch. */
+:root{
+  --bg:#f7f3ea; --box:#fffdf8; --ink:#25221c; --muted:#7a7262; --line:#e6dfd0; --link:#2f5a94; --hover:#f3eee2; --code:#f3eee2;
+  --f-body:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono:ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#0a0a0b; --box:#131315; --ink:#e8e8ea; --muted:#9a9aa0; --line:#26262a; --link:#8399ff; --hover:#1c1c20; --code:#0e0e10;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:72px}
+@media (max-width:640px){html{scroll-padding-top:130px}}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);margin:0}
+a{color:var(--link);text-underline-offset:2px}
+img{max-width:100%}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px;padding-block:12px}
+.brand{font-weight:600;margin-right:auto;text-decoration:none;color:var(--ink)}
+.brand small{font:400 .75rem var(--f-mono);color:var(--muted);margin-left:8px}
+nav{display:flex;gap:14px;overflow-x:auto;max-width:100%;min-width:0}
+nav a{color:var(--muted);text-decoration:none;white-space:nowrap}
+nav a:hover{color:var(--ink)}
+.theme{appearance:none;font:400 .8rem var(--f-mono);color:var(--muted);background:var(--box);border:1px solid var(--line);border-radius:999px;padding:4px 11px;cursor:pointer;white-space:nowrap}
+.theme:hover{color:var(--ink);border-color:var(--muted)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+main{display:grid;gap:16px;padding-block:20px 56px}
+h1,h2,h3,h4{margin:0;line-height:1.3;text-wrap:balance}
+h1{font-size:1.4rem;margin-bottom:6px}
+h2{font-size:1.1rem;margin-top:18px}
+h3{font-size:1.05rem;margin-bottom:4px}
+h4{font-size:.78rem;font-family:var(--f-mono);font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:16px 0 4px}
+p{margin:0 0 8px}
+ul,ol{margin:0 0 8px;padding-left:22px}
+li{margin:3px 0}
+.card{background:var(--box);border:1px solid var(--line);border-radius:8px;padding:16px 18px;min-width:0}
+.eyebrow{font:400 .72rem/1.4 var(--f-mono);color:var(--muted);margin-bottom:4px}
+.muted{color:var(--muted)}
+.jump{font-size:.88rem;margin:0}
+code{font-family:var(--f-mono);font-size:.88em;background:var(--code);border:1px solid var(--line);border-radius:4px;padding:0 4px}
+pre{margin:6px 0 8px;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:12px 14px;overflow-x:auto;font:400 .82rem/1.55 var(--f-mono);tab-size:4}
+pre code{background:none;border:0;padding:0;font-size:inherit}
+.tw{overflow-x:auto;margin:4px 0 8px}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;vertical-align:top;padding:6px 10px 6px 0;border-bottom:1px solid var(--line)}
+th{font:500 .72rem var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+details{border:1px solid var(--line);border-radius:6px;margin:8px 0;background:var(--bg)}
+details>summary{cursor:pointer;padding:8px 12px;list-style:none;font-weight:500}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"+";font-family:var(--f-mono);color:var(--muted);display:inline-block;width:1.4ch}
+details[open]>summary::before{content:"−"}
+details>summary:hover{background:var(--hover)}
+details>*:not(summary){margin-left:12px;margin-right:12px}
+details>p:last-child,details>ul:last-child{margin-bottom:12px}
+.answer>summary{color:var(--link)}
+.totop{font-size:.85rem}
+</style>
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("studyhub-theme")==="dark"?"dark":"light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="./">Study Hub<small>← back</small></a>
+<nav aria-label="Sections"><a href="#start">C++ from zero</a><a href="#night1">Night 1</a><a href="#night2">Night 2</a><a href="#night3">Night 3</a><a href="#night4">Night 4</a></nav>
+<button type="button" class="theme" id="theme" aria-label="Switch to dark mode">☾ Dark</button>
+</div></header>
+<main class="wrap">
+<section class="card intro"><div class="eyebrow">Susquehanna cram · C++</div><h1>C++ Problem Walkthroughs</h1><p>Every problem in your cram plan, explained from the start. Every solution here was compiled and tested against the problem's own examples.</p><ol><li>Read <b>In plain words</b> and solve the example by hand.</li><li>Give it 10 minutes on your own. Being stuck is normal.</li><li>Read <b>How to think about it</b> and the <b>Steps</b>, then try again.</li><li>Still stuck: read the code and its comments line by line, then close this page and <b>type it yourself</b>. Don't copy and paste.</li><li>Tomorrow, solve it again from a blank editor. That's when it sticks.</li></ol><p class="muted">Mini-test and mock problems hide their answers until you open them. Topic notes: <a href="https://docs.google.com/document/d/1_nRVJ1dK71LYTXUCe_5ykXXOBaxYqpc2tH_bFMoBIU8/edit" target="_blank" rel="noopener">cram notes</a>. Custom problem specs: <a href="https://docs.google.com/document/d/1pZgSwJA3AodOZ57NYbRauy0bEDhnIh9eFtk33iuPLOQ/edit" target="_blank" rel="noopener">practice tests</a>.</p></section>
+<h2 id="start">Part 1 · C++ for LeetCode, from zero</h2>
+<section class="card"><div class="eyebrow">Basics 1</div><h3>What LeetCode gives you</h3><p>You don't write a whole program on LeetCode. It gives you a class with one empty function, and you fill in the body. LeetCode runs it on each test case and checks what you <b>return</b>. There's no <code>main()</code> and no reading input, and the headers and <code>using namespace std;</code> are already included.</p><pre><code>class Solution {           // LeetCode writes this
+public:                    // &quot;public&quot; = LeetCode is allowed to call it
+    // Return type, name and inputs are given. You write the inside.
+    vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) {
+        // your code here
+        return {};         // you must return something of the right type
+    }
+};</code></pre><p>You can add your own helper functions inside the class under <code>private:</code>. Several walkthroughs do.</p><p><b>HackerRank can be different:</b> the Susquehanna test may make you read input with <code>cin</code> and print with <code>cout</code>. Frequency Leader (#8) practises that.</p></section>
+<section class="card"><div class="eyebrow">Basics 2</div><h3>The toolkit, line by line</h3><p>The pieces you'll type in almost every problem. Read every comment.</p><pre><code>// ---------- vector: a list that can grow ----------
+vector&lt;int&gt; nums = {5, 2, 8};      // a list of 3 ints
+nums.push_back(4);                 // add to the end   -&gt; {5, 2, 8, 4}
+int first = nums[0];               // read by position, starting at 0 -&gt; 5
+int n = nums.size();               // how many items   -&gt; 4
+nums.back();                       // the last item    -&gt; 4
+vector&lt;int&gt; zeros(5, 0);           // 5 items, all 0
+vector&lt;vector&lt;int&gt;&gt; grid(3, vector&lt;int&gt;(4, 0));   // 3 rows of 4 zeros
+grid[1][2] = 7;                    // row 1, column 2
+
+for (int i = 0; i &lt; n; i++) { }    // loop with an index
+for (int x : nums) { }             // loop over values (x is a copy)
+for (int&amp; x : nums) { x *= 2; }    // &amp; = the real item, so this changes nums
+
+// ---------- string: a list of chars ----------
+string s = &quot;hello&quot;;
+char c = s[0];                     // &#x27;h&#x27;  (single quotes = one char)
+int len = s.size();                // 5
+s += &#x27;!&#x27;;                          // &quot;hello!&quot;
+int pos = c - &#x27;a&#x27;;                 // letter -&gt; 0..25 (&#x27;a&#x27;-&gt;0, &#x27;h&#x27;-&gt;7)
+
+// ---------- unordered_map: look up a value by key, O(1) ----------
+unordered_map&lt;string, int&gt; age;    // key type, value type
+age[&quot;ana&quot;] = 20;                   // add or overwrite
+if (age.count(&quot;ana&quot;)) { }          // 1 if the key exists, else 0
+age[&quot;bob&quot;]++;                      // a missing key starts at 0, so now 1
+for (auto&amp; [key, value] : age) { } // visit every entry (any order)
+age.erase(&quot;ana&quot;);                  // remove a key
+
+// ---------- unordered_set: just keys, &quot;have I seen this?&quot; ----------
+unordered_set&lt;int&gt; seen;
+seen.insert(3);
+if (seen.count(3)) { }
+
+// ---------- sorting ----------
+sort(nums.begin(), nums.end());                      // small to big
+sort(nums.begin(), nums.end(), greater&lt;int&gt;());      // big to small
+sort(nums.begin(), nums.end(), [](int a, int b) {    // your own rule:
+    return a % 10 &lt; b % 10;                          // true if a goes first
+});
+
+// ---------- pair: two values stuck together ----------
+pair&lt;int, int&gt; p = {3, 9};
+p.first;  p.second;                // 3 and 9
+// a vector of pairs sorts by .first, then by .second
+
+// ---------- queue: first in, first out (used for BFS) ----------
+queue&lt;int&gt; q;
+q.push(1); q.push(2);
+int front = q.front();             // 1 (look at the front)
+q.pop();                           // remove the front
+bool empty = q.empty();
+
+// ---------- handy ----------
+max(a, b);  min(a, b);  abs(x);
+INT_MAX;  INT_MIN;                 // biggest and smallest int
+long long big = 1LL * a * b;       // long long when numbers get huge
+auto it = ...;                     // auto = &quot;work out the type for me&quot;</code></pre></section>
+<section class="card"><div class="eyebrow">Basics 3</div><h3>Three things that confuse everyone</h3><div class="tw"><table><thead><tr><th>Thing</th><th>What it means</th><th>Why it matters</th></tr></thead><tbody><tr><td><code>vector&lt;int&gt;&amp; nums</code></td><td>The <b>&amp;</b> means "use the caller's list, don't copy it".</td><td>Copying a big list on every call is slow. In a helper function, forgetting &amp; also means your changes (like marking visited) are lost.</td></tr><tr><td><code>(int)nums.size()</code></td><td>size() returns an <b>unsigned</b> number, which can't be negative. (int) turns it into a normal int.</td><td>If nums is empty, nums.size() − 1 isn't −1, it's a gigantic number, and your loop runs off the end.</td></tr><tr><td><code>map[key]</code></td><td>Reading map[key] when the key is missing <b>creates it</b> with value 0.</td><td>Use map.count(key) to <i>check</i>. Use map[key] only when you want it created, like counting with map[x]++.</td></tr></tbody></table></div></section>
+<section class="card"><div class="eyebrow">Basics 4</div><h3>A routine for every problem</h3><ol><li><b>Say it in plain words</b> and solve the example by hand. If you can't do it by hand, you can't code it yet.</li><li><b>Brute force first.</b> What's the simplest thing that works, even if it's slow? Say its cost.</li><li><b>Find the waste.</b> What does the brute force repeat? That points to the tool: a hash map to remember what you've seen, a sort, a queue for BFS, or a dp array for repeated subproblems.</li><li><b>Code it</b>, then <b>trace the example</b> through your code by hand before you press Submit.</li><li><b>Edge cases:</b> empty input, one element, all the same, negatives, the biggest sizes.</li></ol></section>
+<section class="card"><div class="eyebrow">Basics 5</div><h3>Testing on your own machine</h3><p>To run it outside LeetCode, put the class in a file with a <code>main()</code> that calls it:</p><pre><code>#include &lt;bits/stdc++.h&gt;      // every standard header in one line
+using namespace std;
+
+class Solution {
+public:
+    vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) {
+        // ... paste your solution ...
+        return {};
+    }
+};
+
+int main() {
+    Solution s;
+    vector&lt;int&gt; nums = {2, 7, 11, 15};
+    vector&lt;int&gt; ans = s.twoSum(nums, 9);
+    cout &lt;&lt; ans[0] &lt;&lt; &quot; &quot; &lt;&lt; ans[1] &lt;&lt; &#x27;\n&#x27;;   // expect: 0 1
+}
+
+// Compile and run:  g++ -std=c++17 -Wall main.cpp -o main &amp;&amp; ./main</code></pre></section>
+<section class="card"><div class="eyebrow">Basics 6</div><h3>What the errors mean</h3><div class="tw"><table><thead><tr><th>You see</th><th>Usually means</th></tr></thead><tbody><tr><td><code>expected ';'</code></td><td>A missing semicolon on the line before.</td></tr><tr><td><code>'x' was not declared in this scope</code></td><td>A typo, or x was created inside a { } block and you're using it outside.</td></tr><tr><td><code>no matching function for call</code></td><td>Wrong argument types, such as passing a number where a vector is expected.</td></tr><tr><td>Runtime Error / heap-buffer-overflow</td><td>You read nums[i] with i outside 0 to n − 1. Check loop bounds and grid edges.</td></tr><tr><td>Time Limit Exceeded</td><td>The algorithm is too slow, usually O(n²) when n is 100,000. Look for a hash map or a sort.</td></tr><tr><td>Wrong Answer on a big case</td><td>Often overflow: the answer doesn't fit in an int. Use long long.</td></tr></tbody></table></div></section>
+<h2 id="night1">Night 1 · Thu 5 Nov · Arrays, hash maps, sliding window</h2><p class="jump"><a href="#p1">1. Two Sum</a> · <a href="#p2">2. Contains Duplicate</a> · <a href="#p3">3. Valid Anagram</a> · <a href="#p4">4. Group Anagrams</a> · <a href="#p5">5. Top K Frequent Elements</a> · <a href="#p6">6. Longest Substring Without Repeating Characters</a> · <a href="#p7">7. Longest Consecutive Sequence</a> · <a href="#p8">8. Frequency Leader (custom)</a></p>
+<article class="card" id="p1"><div class="eyebrow">#1 · Easy · Hash map lookup</div><h3><a href="https://leetcode.com/problems/two-sum/" target="_blank" rel="noopener">Two Sum</a></h3><h4>In plain words</h4><p>You get a list of numbers and a <b>target</b>. Find the two positions whose numbers add up to the target, and return those two positions. Example: <code>nums = [2, 7, 11, 15], target = 9</code> → <code>[0, 1]</code>, because nums[0] + nums[1] = 2 + 7 = 9.</p><h4>How to think about it</h4><p>The slow way checks every pair: for each number, loop over all the others. That is two loops, O(n²). The trick: when you are standing on a number x, you already know the partner you need: <b>target − x</b>. So keep a hash map of every number you have already passed (number → its position). For each new number, ask the map: "have I seen my partner?" Asking a hash map is instant, so the whole thing is one loop.</p><h4>Steps</h4><ol><li>Make an empty map: <b>seen</b>, from number to index.</li><li>Go through the list once. For the number at position i, work out <b>need = target − nums[i]</b>.</li><li>If <b>need</b> is in the map, you're done: return {map[need], i}.</li><li>Otherwise, store this number: map[nums[i]] = i, and move on.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) {
+        // seen[value] = the index where we saw that value
+        unordered_map&lt;int, int&gt; seen;
+
+        for (int i = 0; i &lt; (int)nums.size(); i++) {
+            // The number that would pair with nums[i] to hit target
+            int need = target - nums[i];
+
+            // .count(key) is 1 if the key is in the map, 0 if not
+            if (seen.count(need)) {
+                return {seen[need], i};   // {} builds a vector&lt;int&gt;
+            }
+
+            // Not found yet: remember this number for later ones
+            seen[nums[i]] = i;
+        }
+        return {};   // the problem promises an answer, so never reached
+    }
+};</code></pre><h4>Walk through the example</h4><div class="tw"><table><thead><tr><th>i</th><th>nums[i]</th><th>need</th><th>in map?</th><th>map after</th></tr></thead><tbody><tr><td>0</td><td>2</td><td>7</td><td>no</td><td>{2:0}</td></tr><tr><td>1</td><td>7</td><td>2</td><td>yes, at 0</td><td>return [0, 1]</td></tr></tbody></table></div><h4>How fast</h4><p>Time O(n): one pass, and each map lookup is O(1) on average. Space O(n) for the map.</p><h4>Watch out</h4><ul><li>Check the map <b>before</b> inserting the current number, or [3, 3] with target 6 could pair 3 with itself.</li><li>Use <b>seen.count(need)</b> to check. Writing <b>seen[need]</b> on a missing key silently inserts it with value 0.</li></ul></article>
+<article class="card" id="p2"><div class="eyebrow">#2 · Easy · Hash set</div><h3><a href="https://leetcode.com/problems/contains-duplicate/" target="_blank" rel="noopener">Contains Duplicate</a></h3><h4>In plain words</h4><p>Return <b>true</b> if any number appears at least twice in the list, and <b>false</b> if every number is different. Example: [1, 2, 3, 1] → true.</p><h4>How to think about it</h4><p>Walk through the list and keep a set of numbers you've already seen. A set is like a map with only keys: it answers "is x in here?" instantly. The moment you meet a number that's already in the set, you've found a duplicate.</p><h4>Steps</h4><ol><li>Make an empty <b>unordered_set&lt;int&gt;</b>.</li><li>For each number: if it's already in the set, return true.</li><li>Otherwise insert it.</li><li>If the loop finishes, there were no repeats: return false.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    bool containsDuplicate(vector&lt;int&gt;&amp; nums) {
+        unordered_set&lt;int&gt; seen;          // numbers we&#x27;ve passed so far
+
+        for (int x : nums) {              // x takes each value in turn
+            if (seen.count(x)) {          // already seen it?
+                return true;              // that&#x27;s a duplicate
+            }
+            seen.insert(x);               // remember it
+        }
+        return false;                     // got to the end: all different
+    }
+};</code></pre><h4>How fast</h4><p>Time O(n), space O(n).</p><h4>Watch out</h4><ul><li>Another valid way: sort the list, then check if any two neighbours are equal. That's O(n log n) but uses no extra set.</li></ul></article>
+<article class="card" id="p3"><div class="eyebrow">#3 · Easy · Counting</div><h3><a href="https://leetcode.com/problems/valid-anagram/" target="_blank" rel="noopener">Valid Anagram</a></h3><h4>In plain words</h4><p>Two words are anagrams if they use exactly the same letters the same number of times, just in a different order. Return true if <b>t</b> is an anagram of <b>s</b>. Example: "anagram" and "nagaram" → true; "rat" and "car" → false. Only lowercase a–z.</p><h4>How to think about it</h4><p>Count the letters. Because there are only 26 lowercase letters, an array of 26 ints is enough: slot 0 for 'a', slot 1 for 'b', and so on. Add 1 for each letter in s and subtract 1 for each letter in t. If they are anagrams, every slot ends at 0.</p><h4>Steps</h4><ol><li>If the lengths differ, return false straight away.</li><li>Make <b>int count[26] = {0}</b>.</li><li>For each char c in s: count[c - 'a']++. For each char in t: count[c - 'a']--.</li><li>If any slot is not 0, return false. Otherwise true.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        if (s.size() != t.size()) return false;   // different lengths: no
+
+        int count[26] = {0};       // one counter per letter, all start at 0
+
+        // c - &#x27;a&#x27; turns a letter into 0..25 (&#x27;a&#x27;-&gt;0, &#x27;b&#x27;-&gt;1, ... &#x27;z&#x27;-&gt;25)
+        for (char c : s) count[c - &#x27;a&#x27;]++;
+        for (char c : t) count[c - &#x27;a&#x27;]--;
+
+        for (int i = 0; i &lt; 26; i++) {
+            if (count[i] != 0) return false;      // some letter didn&#x27;t match
+        }
+        return true;
+    }
+};</code></pre><h4>How fast</h4><p>Time O(n). Space O(1): the array is always 26 slots, however long the words are.</p><h4>Watch out</h4><ul><li><b>c - 'a'</b> works because chars are stored as numbers and 'a' to 'z' are consecutive.</li><li>If the input could contain any characters (not just a–z), use an <b>unordered_map&lt;char, int&gt;</b> instead of the array.</li></ul></article>
+<article class="card" id="p4"><div class="eyebrow">#4 · Medium · Hash map with a built key</div><h3><a href="https://leetcode.com/problems/group-anagrams/" target="_blank" rel="noopener">Group Anagrams</a></h3><h4>In plain words</h4><p>Given a list of words, put the anagrams together in groups. Example: ["eat","tea","tan","ate","nat","bat"] → [["eat","tea","ate"], ["tan","nat"], ["bat"]]. The groups can be in any order.</p><h4>How to think about it</h4><p>Anagrams look identical once you sort their letters: "eat", "tea" and "ate" all become "aet". So use the sorted word as a <b>key</b> in a map, and the value is the list of original words that share that key. At the end, every value in the map is one group.</p><h4>Steps</h4><ol><li>Make <b>unordered_map&lt;string, vector&lt;string&gt;&gt; groups</b>.</li><li>For each word: copy it, sort the copy, and push the original word into groups[sortedCopy].</li><li>Move every value from the map into the answer.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    vector&lt;vector&lt;string&gt;&gt; groupAnagrams(vector&lt;string&gt;&amp; strs) {
+        // key: the word with its letters sorted (&quot;aet&quot;)
+        // value: every original word with that key (&quot;eat&quot;, &quot;tea&quot;, &quot;ate&quot;)
+        unordered_map&lt;string, vector&lt;string&gt;&gt; groups;
+
+        for (const string&amp; word : strs) {   // const&amp; = read it, don&#x27;t copy
+            string key = word;              // make a copy we can change
+            sort(key.begin(), key.end());   // &quot;tea&quot; -&gt; &quot;aet&quot;
+            groups[key].push_back(word);    // [] creates an empty list if new
+        }
+
+        vector&lt;vector&lt;string&gt;&gt; answer;
+        // Each map entry is a pair: .first is the key, .second the list
+        for (auto&amp; entry : groups) {
+            answer.push_back(entry.second);
+        }
+        return answer;
+    }
+};</code></pre><h4>How fast</h4><p>Time O(n · k log k), where n is the number of words and k the longest word (sorting each word). Space O(n · k).</p><h4>Watch out</h4><ul><li>Here using <b>groups[key]</b> on a new key is exactly what you want: it creates an empty vector you can push into.</li><li>Faster key for long words: count the 26 letters and turn the counts into a string. Sorting is fine for interviews.</li></ul></article>
+<article class="card" id="p5"><div class="eyebrow">#5 · Medium · Count, then pick the biggest</div><h3><a href="https://leetcode.com/problems/top-k-frequent-elements/" target="_blank" rel="noopener">Top K Frequent Elements</a></h3><h4>In plain words</h4><p>Return the <b>k</b> numbers that appear most often. Example: nums = [1,1,1,2,2,3], k = 2 → [1, 2] (1 appears 3 times, 2 appears twice). Any order is fine.</p><h4>How to think about it</h4><p>Two steps. First count how often each number appears (a map from number to count). Then you need the k numbers with the highest counts. The simplest correct way: copy the (count, number) pairs into a vector, sort it from biggest count to smallest, and take the first k. The follow-up asks for better than O(n log n); the bucket version for that is under "Watch out".</p><h4>Steps</h4><ol><li>Count: <b>freq[x]++</b> for every x.</li><li>Copy each (count, number) into a vector of pairs.</li><li>Sort the pairs in descending order. Pairs sort by .first (the count) first.</li><li>Take the .second (the number) of the first k pairs.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    vector&lt;int&gt; topKFrequent(vector&lt;int&gt;&amp; nums, int k) {
+        // 1. Count how many times each number appears
+        unordered_map&lt;int, int&gt; freq;
+        for (int x : nums) freq[x]++;      // missing keys start at 0
+
+        // 2. Put (count, number) pairs in a list so we can sort them
+        vector&lt;pair&lt;int, int&gt;&gt; byCount;
+        for (auto&amp; [number, count] : freq) {   // unpack each map entry
+            byCount.push_back({count, number});
+        }
+
+        // 3. Sort biggest count first (greater&lt;&gt; means descending)
+        sort(byCount.begin(), byCount.end(), greater&lt;pair&lt;int, int&gt;&gt;());
+
+        // 4. The first k pairs are the answer; keep just the numbers
+        vector&lt;int&gt; answer;
+        for (int i = 0; i &lt; k; i++) {
+            answer.push_back(byCount[i].second);
+        }
+        return answer;
+    }
+};</code></pre><h4>How fast</h4><p>Time O(n log n) because of the sort. Space O(n).</p><h4>Watch out</h4><ul><li><b>auto&amp; [number, count] : freq</b> unpacks each map entry into two names (C++17). It's the same as entry.first and entry.second.</li><li>Faster O(n) version (bucket sort): make <b>vector&lt;vector&lt;int&gt;&gt; bucket(n + 1)</b>, put each number into bucket[its count], then walk the buckets from n down to 1, collecting numbers until you have k.</li></ul></article>
+<article class="card" id="p6"><div class="eyebrow">#6 · Medium · Sliding window</div><h3><a href="https://leetcode.com/problems/longest-substring-without-repeating-characters/" target="_blank" rel="noopener">Longest Substring Without Repeating Characters</a></h3><h4>In plain words</h4><p>Find the length of the longest stretch of the string (letters next to each other) where no character repeats. Example: "abcabcbb" → 3 ("abc"). "pwwkew" → 3 ("wke").</p><h4>How to think about it</h4><p>Picture a window over the string with a <b>left</b> edge and a <b>right</b> edge. Move right forward one character at a time. If the new character already appears inside the window, the window is broken, so jump left to just past that earlier copy. To know where the earlier copy was, keep a map from character to the last index where you saw it. After each step, the window right − left + 1 has no repeats, so compare its size to the best so far.</p><h4>Steps</h4><ol><li>left = 0, best = 0, and a map <b>last</b> from char to last index seen.</li><li>For right = 0 to the end: let c = s[right].</li><li>If c was seen before <b>and</b> that index is inside the window (≥ left), move left to last[c] + 1.</li><li>Record last[c] = right, then best = max(best, right − left + 1).</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map&lt;char, int&gt; last;   // char -&gt; last index we saw it at
+        int best = 0;
+        int left = 0;                    // window is s[left .. right]
+
+        for (int right = 0; right &lt; (int)s.size(); right++) {
+            char c = s[right];
+
+            // Seen c before, and that copy is inside the current window?
+            if (last.count(c) &amp;&amp; last[c] &gt;= left) {
+                left = last[c] + 1;      // move left just past the old copy
+            }
+
+            last[c] = right;             // c&#x27;s newest position
+            best = max(best, right - left + 1);   // window length
+        }
+        return best;
+    }
+};</code></pre><h4>Walk through the example</h4><div class="tw"><table><thead><tr><th>right</th><th>char</th><th>left</th><th>window</th><th>best</th></tr></thead><tbody><tr><td>0</td><td>a</td><td>0</td><td>a</td><td>1</td></tr><tr><td>1</td><td>b</td><td>0</td><td>ab</td><td>2</td></tr><tr><td>2</td><td>c</td><td>0</td><td>abc</td><td>3</td></tr><tr><td>3</td><td>a</td><td>1</td><td>bca</td><td>3</td></tr><tr><td>4</td><td>b</td><td>2</td><td>cab</td><td>3</td></tr></tbody></table></div><h4>How fast</h4><p>Time O(n): right moves n times and left only ever moves forward. Space O(number of different characters).</p><h4>Watch out</h4><ul><li>The check <b>last[c] &gt;= left</b> matters. In "abba", when right reaches the last 'a', the old 'a' at index 0 is already outside the window (left is 2), so left must not jump back.</li><li>Window length is <b>right − left + 1</b>, not right − left.</li></ul></article>
+<article class="card" id="p7"><div class="eyebrow">#7 · Medium · Hash set · Mini-test 1</div><h3><a href="https://leetcode.com/problems/longest-consecutive-sequence/" target="_blank" rel="noopener">Longest Consecutive Sequence</a></h3><h4>In plain words</h4><p>Given an unsorted list, find the length of the longest run of consecutive numbers (like 1, 2, 3, 4), in any order in the list. Must be O(n). Example: [100, 4, 200, 1, 3, 2] → 4 (the run 1, 2, 3, 4).</p><p class="muted">Do this one timed. Open one hint, try again, then open the next.</p><details class="hint"><summary>Hint 1</summary><p>Sorting would be O(n log n), which isn't allowed. What container lets you ask "is x + 1 in the list?" instantly?</p></details><details class="hint"><summary>Hint 2</summary><p>Put every number in an unordered_set. Now, from any number x you can count upward: x+1, x+2, ... while they're in the set.</p></details><details class="hint"><summary>Hint 3</summary><p>That could still be slow if you count up from every number. Only start counting from x if <b>x − 1 is not in the set</b>, which means x is the start of a run.</p></details><details class="answer"><summary>Show the full walkthrough</summary><h4>How to think about it</h4><p>Put everything in a set. A number x is the <b>start</b> of a run only if x − 1 isn't in the set. From each start, count upward while the next number exists. Each number is counted once in total, so it's O(n).</p><h4>The code</h4><pre><code>class Solution {
+public:
+    int longestConsecutive(vector&lt;int&gt;&amp; nums) {
+        // Put every number in a set so &quot;is x in the list?&quot; is O(1)
+        unordered_set&lt;int&gt; have(nums.begin(), nums.end());
+        int best = 0;
+
+        for (int x : have) {
+            // Only start counting at the beginning of a run
+            if (have.count(x - 1)) continue;   // x-1 exists: not a start
+
+            int length = 1;
+            while (have.count(x + length)) {   // x+1, x+2, ... present?
+                length++;
+            }
+            best = max(best, length);
+        }
+        return best;
+    }
+};</code></pre><h4>How fast</h4><p>Time O(n): each number is looked at a constant number of times. Space O(n).</p><h4>Watch out</h4><ul><li>Loop over the <b>set</b>, not the original list, so duplicates don't make you repeat work.</li><li>An empty list must return 0. Here it does, because best starts at 0.</li></ul></details></article>
+<article class="card" id="p8"><div class="eyebrow">#8 · Easy · Counting + reading input · Mini-test 1</div><h3>Frequency Leader (custom)</h3><h4>In plain words</h4><p>Read n, then n integers from the input. Print the value that appears most often. If several values tie, print the smallest of them. Example: input "7" then "4 1 4 2 1 4 1" → 1 (1 and 4 both appear 3 times; 1 is smaller).</p><p class="muted">Do this one timed. Open one hint, try again, then open the next.</p><details class="hint"><summary>Hint 1</summary><p>There's no function here: you write the whole program, including <b>main()</b> and reading with <b>cin</b>. Use the input template from the cram notes.</p></details><details class="hint"><summary>Hint 2</summary><p>Count with unordered_map&lt;int, int&gt;, the same as Top K Frequent.</p></details><details class="hint"><summary>Hint 3</summary><p>Then scan the map with two variables, bestValue and bestCount. A value wins if its count is bigger, <b>or</b> the count is equal and the value is smaller.</p></details><details class="answer"><summary>Show the full walkthrough</summary><h4>How to think about it</h4><p>Read all the numbers and count them in a map. Then go through the map keeping the best answer so far, with the tie rule built into the comparison.</p><h4>The code</h4><pre><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);   // makes cin fast for big inputs
+    cin.tie(nullptr);
+
+    int n;
+    cin &gt;&gt; n;                      // first number: how many follow
+
+    unordered_map&lt;long long, int&gt; freq;
+    for (int i = 0; i &lt; n; i++) {
+        long long x;
+        cin &gt;&gt; x;
+        freq[x]++;
+    }
+
+    long long bestValue = 0;
+    int bestCount = 0;
+    for (auto&amp; [value, count] : freq) {
+        // Better if more frequent, or same count but smaller value
+        if (count &gt; bestCount || (count == bestCount &amp;&amp; value &lt; bestValue)) {
+            bestValue = value;
+            bestCount = count;
+        }
+    }
+    cout &lt;&lt; bestValue &lt;&lt; &#x27;\n&#x27;;
+    return 0;
+}</code></pre><h4>How fast</h4><p>Time O(n), space O(number of different values).</p><h4>Watch out</h4><ul><li>Values can be negative. Starting bestValue at 0 is still safe, because bestCount starts at 0 and the first real value always replaces it.</li><li>Values reach ±10⁹, which fits in an int; long long is used here just to be safe.</li><li>Print with '\n' at the end. Some judges are strict about the final newline.</li></ul></details></article>
+<h2 id="night2">Night 2 · Fri 6 Nov · Graphs: BFS and DFS</h2><p class="jump"><a href="#p9">9. Flood Fill</a> · <a href="#p10">10. Number of Islands</a> · <a href="#p11">11. Max Area of Island</a> · <a href="#p12">12. Rotting Oranges</a> · <a href="#p13">13. Shortest Path in Binary Matrix</a> · <a href="#p14">14. Find if Path Exists in Graph</a> · <a href="#p15">15. Course Schedule</a></p>
+<article class="card" id="p9"><div class="eyebrow">#9 · Easy · DFS on a grid (recursion)</div><h3><a href="https://leetcode.com/problems/flood-fill/" target="_blank" rel="noopener">Flood Fill</a></h3><h4>In plain words</h4><p>A picture is a grid of numbers (colours). Starting at cell (sr, sc), change that cell and every cell connected to it (up, down, left, right) that has the <b>same original colour</b> to the new colour. Like the paint-bucket tool in Paint.</p><h4>How to think about it</h4><p>This is your first grid search. From the start cell, paint it, then do the same thing to each of its 4 neighbours, but only if the neighbour is inside the grid and still has the original colour. A function that calls itself on the neighbours (recursion, also called DFS: depth-first search) does exactly this.</p><h4>Steps</h4><ol><li>Remember the original colour of the start cell.</li><li>If it's already the new colour, return the image unchanged (otherwise you'd loop forever).</li><li>Write a helper <b>fill(r, c)</b>: if (r, c) is off the grid or not the original colour, stop. Otherwise paint it and call fill on the 4 neighbours.</li><li>Call fill(sr, sc) and return the image.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    vector&lt;vector&lt;int&gt;&gt; floodFill(vector&lt;vector&lt;int&gt;&gt;&amp; image,
+                                  int sr, int sc, int color) {
+        int original = image[sr][sc];
+        if (original == color) return image;   // nothing to do (and avoids
+                                               // painting forever)
+        fill(image, sr, sc, original, color);
+        return image;
+    }
+
+private:
+    // Paint (r, c) and spread to neighbours with the same original colour
+    void fill(vector&lt;vector&lt;int&gt;&gt;&amp; img, int r, int c, int original, int color) {
+        // Stop if we stepped off the grid
+        if (r &lt; 0 || r &gt;= (int)img.size() || c &lt; 0 || c &gt;= (int)img[0].size())
+            return;
+        // Stop if this cell isn&#x27;t part of the region
+        if (img[r][c] != original) return;
+
+        img[r][c] = color;          // paint it (also marks it as visited)
+
+        fill(img, r + 1, c, original, color);   // down
+        fill(img, r - 1, c, original, color);   // up
+        fill(img, r, c + 1, original, color);   // right
+        fill(img, r, c - 1, original, color);   // left
+    }
+};</code></pre><h4>How fast</h4><p>Time O(rows × cols): each cell is painted at most once. Space O(rows × cols) in the worst case for the recursion.</p><h4>Watch out</h4><ul><li>Painting a cell is what stops it being visited twice: once it's the new colour, it no longer matches <b>original</b>.</li><li>Always check the grid edges <b>before</b> reading img[r][c], or you read outside the vector and crash.</li></ul></article>
+<article class="card" id="p10"><div class="eyebrow">#10 · Medium · Count connected regions</div><h3><a href="https://leetcode.com/problems/number-of-islands/" target="_blank" rel="noopener">Number of Islands</a></h3><h4>In plain words</h4><p>The grid has '1' for land and '0' for water. An island is a group of land cells joined up, down, left or right. Count the islands.</p><h4>How to think about it</h4><p>Scan every cell. When you find land you haven't visited, that's a new island: add 1, then "sink" the whole island (turn all its connected land into water) with the same recursion as Flood Fill, so you never count it again.</p><h4>Steps</h4><ol><li>count = 0. Loop over every row r and column c.</li><li>If grid[r][c] is '1': count++, then sink(r, c).</li><li>sink(r, c): if off the grid or not '1', stop. Otherwise set it to '0' and sink the 4 neighbours.</li><li>Return count.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int numIslands(vector&lt;vector&lt;char&gt;&gt;&amp; grid) {
+        int count = 0;
+        for (int r = 0; r &lt; (int)grid.size(); r++) {
+            for (int c = 0; c &lt; (int)grid[0].size(); c++) {
+                if (grid[r][c] == &#x27;1&#x27;) {   // land we haven&#x27;t sunk yet
+                    count++;               // so it&#x27;s a new island
+                    sink(grid, r, c);      // remove the whole island
+                }
+            }
+        }
+        return count;
+    }
+
+private:
+    // Turn this land cell and all land connected to it into water
+    void sink(vector&lt;vector&lt;char&gt;&gt;&amp; g, int r, int c) {
+        if (r &lt; 0 || r &gt;= (int)g.size() || c &lt; 0 || c &gt;= (int)g[0].size())
+            return;                        // off the grid
+        if (g[r][c] != &#x27;1&#x27;) return;        // water, or already sunk
+
+        g[r][c] = &#x27;0&#x27;;                     // sink it = mark visited
+        sink(g, r + 1, c);
+        sink(g, r - 1, c);
+        sink(g, r, c + 1);
+        sink(g, r, c - 1);
+    }
+};</code></pre><h4>How fast</h4><p>Time O(rows × cols). Space O(rows × cols) worst case for recursion.</p><h4>Watch out</h4><ul><li>The grid holds <b>chars</b>: compare with '1' (quotes), not the number 1.</li><li>If the interviewer doesn't want you to change the input, keep a separate <b>vector&lt;vector&lt;bool&gt;&gt; visited</b> instead.</li><li>On a very large grid, recursion can overflow the stack. Then use the BFS template from the cram notes (a queue instead of recursion).</li></ul></article>
+<article class="card" id="p11"><div class="eyebrow">#11 · Medium · DFS that returns a count</div><h3><a href="https://leetcode.com/problems/max-area-of-island/" target="_blank" rel="noopener">Max Area of Island</a></h3><h4>In plain words</h4><p>Same grid idea, but with ints 1 and 0. The area of an island is how many cells it has. Return the biggest area, or 0 if there's no land.</p><h4>How to think about it</h4><p>Exactly Number of Islands, except the sink function now <b>returns</b> how many cells it sank: 1 for this cell plus whatever its 4 neighbours return. Keep the maximum.</p><h4>Steps</h4><ol><li>For each land cell, call area(r, c) and keep the biggest result.</li><li>area(r, c): off the grid or water → return 0.</li><li>Otherwise mark it 0, and return 1 + area of the 4 neighbours.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int maxAreaOfIsland(vector&lt;vector&lt;int&gt;&gt;&amp; grid) {
+        int best = 0;
+        for (int r = 0; r &lt; (int)grid.size(); r++)
+            for (int c = 0; c &lt; (int)grid[0].size(); c++)
+                if (grid[r][c] == 1)
+                    best = max(best, area(grid, r, c));
+        return best;
+    }
+
+private:
+    // Sink the island at (r, c) and return how many cells it had
+    int area(vector&lt;vector&lt;int&gt;&gt;&amp; g, int r, int c) {
+        if (r &lt; 0 || r &gt;= (int)g.size() || c &lt; 0 || c &gt;= (int)g[0].size())
+            return 0;                  // off the grid adds nothing
+        if (g[r][c] != 1) return 0;    // water or visited adds nothing
+
+        g[r][c] = 0;                   // mark visited
+        return 1                       // this cell
+             + area(g, r + 1, c) + area(g, r - 1, c)
+             + area(g, r, c + 1) + area(g, r, c - 1);
+    }
+};</code></pre><h4>How fast</h4><p>Time O(rows × cols), space O(rows × cols) worst case.</p><h4>Watch out</h4><ul><li>This is the general trick for grid recursion: decide what each call <b>returns</b>, and what it returns for the "stop" cases (here 0).</li></ul></article>
+<article class="card" id="p12"><div class="eyebrow">#12 · Medium · Multi-source BFS (spreading by minutes)</div><h3><a href="https://leetcode.com/problems/rotting-oranges/" target="_blank" rel="noopener">Rotting Oranges</a></h3><h4>In plain words</h4><p>Each cell is 0 (empty), 1 (fresh orange) or 2 (rotten). Every minute, each rotten orange rots its fresh neighbours (up, down, left, right). Return how many minutes until no fresh orange is left, or −1 if some can never rot.</p><h4>How to think about it</h4><p>Rot spreads in <b>waves</b>, one step per minute. That's breadth-first search (BFS): a queue processes cells in the order they were reached, so it naturally goes wave by wave. Put <b>all</b> rotten oranges in the queue at the start (several starting points = "multi-source"). Each minute, process exactly the cells currently in the queue, rot their fresh neighbours and add those to the queue.</p><h4>Steps</h4><ol><li>Scan the grid: push every rotten orange's position into a queue, and count the fresh ones.</li><li>minutes = 0. While the queue isn't empty <b>and</b> fresh &gt; 0: process one wave (the current queue size), rotting fresh neighbours, then minutes++.</li><li>At the end: if fresh is still &gt; 0, return −1. Otherwise return minutes.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int orangesRotting(vector&lt;vector&lt;int&gt;&gt;&amp; grid) {
+        int R = grid.size(), C = grid[0].size();
+        queue&lt;pair&lt;int, int&gt;&gt; q;   // positions of rotten oranges to spread from
+        int fresh = 0;
+
+        for (int r = 0; r &lt; R; r++)
+            for (int c = 0; c &lt; C; c++) {
+                if (grid[r][c] == 2) q.push({r, c});   // all starting points
+                else if (grid[r][c] == 1) fresh++;
+            }
+
+        // The 4 directions as (row change, column change)
+        int dr[4] = {1, -1, 0, 0};
+        int dc[4] = {0, 0, 1, -1};
+        int minutes = 0;
+
+        while (!q.empty() &amp;&amp; fresh &gt; 0) {
+            int waveSize = q.size();          // everything rotten right now
+            for (int i = 0; i &lt; waveSize; i++) {
+                auto [r, c] = q.front();      // take the next rotten orange
+                q.pop();
+                for (int d = 0; d &lt; 4; d++) {
+                    int nr = r + dr[d], nc = c + dc[d];
+                    if (nr &lt; 0 || nr &gt;= R || nc &lt; 0 || nc &gt;= C) continue;
+                    if (grid[nr][nc] != 1) continue;   // only fresh ones rot
+                    grid[nr][nc] = 2;         // rot it now so it&#x27;s not
+                    fresh--;                  // counted twice
+                    q.push({nr, nc});         // it spreads next minute
+                }
+            }
+            minutes++;                        // one whole wave = one minute
+        }
+        return fresh == 0 ? minutes : -1;
+    }
+};</code></pre><h4>How fast</h4><p>Time O(rows × cols): each orange enters the queue once. Space O(rows × cols) for the queue.</p><h4>Watch out</h4><ul><li>Mark a neighbour rotten <b>when you push it</b>, not when you pop it. Otherwise two oranges can both push it, and it's counted twice.</li><li>The loop also stops when fresh hits 0, so you don't add an extra minute at the end.</li><li>No fresh oranges at the start → answer 0.</li></ul></article>
+<article class="card" id="p13"><div class="eyebrow">#13 · Medium · BFS for shortest path</div><h3><a href="https://leetcode.com/problems/shortest-path-in-binary-matrix/" target="_blank" rel="noopener">Shortest Path in Binary Matrix</a></h3><h4>In plain words</h4><p>An n × n grid of 0s (open) and 1s (blocked). Find the shortest path from the top-left to the bottom-right through open cells, moving in any of <b>8 directions</b> (diagonals too). The length counts cells, including the first and last. Return −1 if there's no path.</p><h4>How to think about it</h4><p>When every step costs the same, BFS finds the shortest path: it explores everything 1 step away, then 2 steps, and so on, so the first time it reaches a cell is the shortest way there. Store the distance to each cell in a dist grid, which also tells you which cells you've already visited (−1 = not yet).</p><h4>Steps</h4><ol><li>If the start or end is blocked, return −1.</li><li>dist = n × n grid of −1. Set dist[0][0] = 1 and push (0, 0).</li><li>Pop a cell; for each of the 8 neighbours that's inside, open (0) and unvisited: dist = current + 1, push it.</li><li>Return dist[n−1][n−1] (still −1 if never reached).</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int shortestPathBinaryMatrix(vector&lt;vector&lt;int&gt;&gt;&amp; grid) {
+        int n = grid.size();
+        if (grid[0][0] == 1 || grid[n - 1][n - 1] == 1) return -1;
+
+        // dist[r][c] = path length to reach (r, c); -1 means not visited
+        vector&lt;vector&lt;int&gt;&gt; dist(n, vector&lt;int&gt;(n, -1));
+        queue&lt;pair&lt;int, int&gt;&gt; q;
+        dist[0][0] = 1;            // the start cell counts as length 1
+        q.push({0, 0});
+
+        while (!q.empty()) {
+            auto [r, c] = q.front();
+            q.pop();
+            // Try all 8 neighbours: every dr and dc from -1 to 1
+            for (int dr = -1; dr &lt;= 1; dr++) {
+                for (int dc = -1; dc &lt;= 1; dc++) {
+                    if (dr == 0 &amp;&amp; dc == 0) continue;     // that&#x27;s itself
+                    int nr = r + dr, nc = c + dc;
+                    if (nr &lt; 0 || nr &gt;= n || nc &lt; 0 || nc &gt;= n) continue;
+                    if (grid[nr][nc] == 1) continue;      // blocked
+                    if (dist[nr][nc] != -1) continue;     // already visited
+                    dist[nr][nc] = dist[r][c] + 1;
+                    q.push({nr, nc});
+                }
+            }
+        }
+        return dist[n - 1][n - 1];
+    }
+};</code></pre><h4>How fast</h4><p>Time O(n²): each cell is visited once. Space O(n²).</p><h4>Watch out</h4><ul><li>Use BFS (a queue), not DFS, for shortest paths. DFS finds <i>a</i> path, not the shortest.</li><li>A 1 × 1 grid [[0]] has answer 1.</li></ul></article>
+<article class="card" id="p14"><div class="eyebrow">#14 · Easy · Graph BFS with an adjacency list · Mini-test 2</div><h3><a href="https://leetcode.com/problems/find-if-path-exists-in-graph/" target="_blank" rel="noopener">Find if Path Exists in Graph</a></h3><h4>In plain words</h4><p>There are n points (nodes) numbered 0 to n−1, and a list of two-way connections (edges) like [0, 1]. Return true if you can get from <b>source</b> to <b>destination</b> by following edges.</p><p class="muted">Do this one timed. Open one hint, try again, then open the next.</p><details class="hint"><summary>Hint 1</summary><p>First turn the edge list into an <b>adjacency list</b>: vector&lt;vector&lt;int&gt;&gt; adj(n), where adj[a] lists every node connected to a. Each edge goes in both directions.</p></details><details class="hint"><summary>Hint 2</summary><p>Then it's a search from source, just like the grid, but the "neighbours" of u are adj[u] instead of 4 directions.</p></details><details class="hint"><summary>Hint 3</summary><p>Keep a vector&lt;bool&gt; visited(n) so you don't loop forever around a cycle.</p></details><details class="answer"><summary>Show the full walkthrough</summary><h4>How to think about it</h4><p>Build the adjacency list, then BFS from source. If you ever pop destination, return true. If the queue empties first, return false.</p><h4>The code</h4><pre><code>class Solution {
+public:
+    bool validPath(int n, vector&lt;vector&lt;int&gt;&gt;&amp; edges,
+                   int source, int destination) {
+        // adj[u] = every node directly connected to u
+        vector&lt;vector&lt;int&gt;&gt; adj(n);
+        for (auto&amp; e : edges) {
+            adj[e[0]].push_back(e[1]);   // edges go both ways
+            adj[e[1]].push_back(e[0]);
+        }
+
+        vector&lt;bool&gt; visited(n, false);
+        queue&lt;int&gt; q;
+        q.push(source);
+        visited[source] = true;
+
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            if (u == destination) return true;    // reached it
+            for (int v : adj[u]) {                // every neighbour of u
+                if (!visited[v]) {
+                    visited[v] = true;
+                    q.push(v);
+                }
+            }
+        }
+        return false;                             // ran out of places to go
+    }
+};</code></pre><h4>How fast</h4><p>Time O(n + number of edges). Space O(n + number of edges).</p><h4>Watch out</h4><ul><li>Forgetting the second push_back makes the graph one-way and gives wrong answers.</li><li>source == destination is true straight away (the first pop).</li></ul></details></article>
+<article class="card" id="p15"><div class="eyebrow">#15 · Medium · Topological sort (cycle check) · Mini-test 2</div><h3><a href="https://leetcode.com/problems/course-schedule/" target="_blank" rel="noopener">Course Schedule</a></h3><h4>In plain words</h4><p>There are numCourses courses. Each pair [a, b] means "to take a you must first take b". Return true if you can finish every course, i.e. the requirements never go round in a circle (a needs b, b needs a).</p><p class="muted">Do this one timed. Open one hint, try again, then open the next.</p><details class="hint"><summary>Hint 1</summary><p>Count each course's <b>in-degree</b>: how many courses it is still waiting for.</p></details><details class="hint"><summary>Hint 2</summary><p>Courses with in-degree 0 can be taken now. Put them in a queue.</p></details><details class="hint"><summary>Hint 3</summary><p>When you take a course, every course that depended on it has one less thing to wait for. If that drops to 0, it joins the queue. If you take all numCourses, there was no cycle.</p></details><details class="answer"><summary>Show the full walkthrough</summary><h4>How to think about it</h4><p>Kahn's algorithm, the same code as in the cram notes. Repeatedly take any course with nothing left to wait for. Courses stuck in a cycle never reach 0, so you'll take fewer than numCourses.</p><h4>The code</h4><pre><code>class Solution {
+public:
+    bool canFinish(int numCourses, vector&lt;vector&lt;int&gt;&gt;&amp; prerequisites) {
+        vector&lt;vector&lt;int&gt;&gt; unlocks(numCourses);  // b -&gt; courses that need b
+        vector&lt;int&gt; waitingFor(numCourses, 0);    // the &quot;in-degree&quot;
+
+        for (auto&amp; p : prerequisites) {
+            int course = p[0], needs = p[1];
+            unlocks[needs].push_back(course);
+            waitingFor[course]++;
+        }
+
+        queue&lt;int&gt; q;                             // courses we can take now
+        for (int i = 0; i &lt; numCourses; i++)
+            if (waitingFor[i] == 0) q.push(i);
+
+        int taken = 0;
+        while (!q.empty()) {
+            int c = q.front();
+            q.pop();
+            taken++;
+            for (int next : unlocks[c]) {
+                waitingFor[next]--;               // one fewer to wait for
+                if (waitingFor[next] == 0) q.push(next);
+            }
+        }
+        return taken == numCourses;               // all taken = no cycle
+    }
+};</code></pre><h4>How fast</h4><p>Time O(courses + prerequisites). Space the same.</p><h4>Watch out</h4><ul><li>Read the pair the right way round: [a, b] means b comes <b>before</b> a, so the arrow goes b → a.</li></ul></details></article>
+<h2 id="night3">Night 3 · Sat 7 Nov · Binary search, intervals, writing a class</h2><p class="jump"><a href="#p16">16. Binary Search</a> · <a href="#p17">17. Search Insert Position</a> · <a href="#p18">18. Koko Eating Bananas</a> · <a href="#p19">19. Merge Intervals</a> · <a href="#p20">20. Non-overlapping Intervals</a> · <a href="#p21">21. Design Parking System</a> · <a href="#p22">22. Find Minimum in Rotated Sorted Array</a> · <a href="#p23">23. Library class (custom)</a></p>
+<article class="card" id="p16"><div class="eyebrow">#16 · Easy · Binary search</div><h3><a href="https://leetcode.com/problems/binary-search/" target="_blank" rel="noopener">Binary Search</a></h3><h4>In plain words</h4><p>The list is sorted. Return the index of <b>target</b>, or −1 if it isn't there. Must be O(log n).</p><h4>How to think about it</h4><p>Like guessing a number between 1 and 100 by always guessing the middle: each guess throws away half of what's left. Keep two ends, lo and hi. Look at the middle element. If it's the target, done. If it's too small, the target can only be to the right, so move lo past mid. If it's too big, move hi before mid. Stop when lo passes hi.</p><h4>Steps</h4><ol><li>lo = 0, hi = n − 1.</li><li>While lo ≤ hi: mid = lo + (hi − lo) / 2.</li><li>nums[mid] == target → return mid. nums[mid] &lt; target → lo = mid + 1. Otherwise hi = mid − 1.</li><li>Loop ended: return −1.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int search(vector&lt;int&gt;&amp; nums, int target) {
+        int lo = 0, hi = (int)nums.size() - 1;   // search inside [lo, hi]
+
+        while (lo &lt;= hi) {
+            // Same as (lo + hi) / 2, but can&#x27;t overflow for huge numbers
+            int mid = lo + (hi - lo) / 2;
+
+            if (nums[mid] == target) return mid;      // found it
+            if (nums[mid] &lt; target) lo = mid + 1;     // answer is to the right
+            else hi = mid - 1;                        // answer is to the left
+        }
+        return -1;                                    // range is empty
+    }
+};</code></pre><h4>Walk through the example</h4><div class="tw"><table><thead><tr><th>lo</th><th>hi</th><th>mid</th><th>nums[mid]</th><th>action</th></tr></thead><tbody><tr><td>0</td><td>5</td><td>2</td><td>3</td><td>3 &lt; 9 → lo = 3</td></tr><tr><td>3</td><td>5</td><td>4</td><td>9</td><td>found → return 4</td></tr></tbody></table></div><h4>How fast</h4><p>Time O(log n): the range halves every step (a million items takes about 20 steps). Space O(1).</p><h4>Watch out</h4><ul><li>The trace uses nums = [−1, 0, 3, 5, 9, 12], target 9.</li><li>Use <b>lo + (hi − lo) / 2</b>, not (lo + hi) / 2, so a big lo + hi can't overflow an int.</li><li>Off-by-one bugs are the classic mistake. In this version the range is <b>[lo, hi] inclusive</b>, so the loop is lo ≤ hi and you move to mid ± 1.</li></ul></article>
+<article class="card" id="p17"><div class="eyebrow">#17 · Easy · Binary search (lower bound)</div><h3><a href="https://leetcode.com/problems/search-insert-position/" target="_blank" rel="noopener">Search Insert Position</a></h3><h4>In plain words</h4><p>The list is sorted with no duplicates. Return the index of target if it's there; if not, return the index where it <b>would be inserted</b> to keep the list sorted. Example: [1, 3, 5, 6], target 2 → 1.</p><h4>How to think about it</h4><p>Both cases ask the same question: "what's the first index whose value is ≥ target?" That's called the <b>lower bound</b>, and it's the binary search template in the cram notes. Here the range is [lo, hi) with hi = n, because the answer can be n (insert at the very end).</p><h4>Steps</h4><ol><li>lo = 0, hi = n (one past the end).</li><li>While lo &lt; hi: mid = lo + (hi − lo) / 2.</li><li>If nums[mid] &lt; target, the answer is after mid: lo = mid + 1. Otherwise mid might be the answer: hi = mid.</li><li>When lo == hi, that's the answer.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int searchInsert(vector&lt;int&gt;&amp; nums, int target) {
+        // Find the first index whose value is &gt;= target.
+        // The answer is somewhere in [lo, hi); hi = n allows &quot;at the end&quot;.
+        int lo = 0, hi = nums.size();
+
+        while (lo &lt; hi) {
+            int mid = lo + (hi - lo) / 2;
+            if (nums[mid] &lt; target) {
+                lo = mid + 1;      // mid is too small, so it can&#x27;t be it
+            } else {
+                hi = mid;          // mid could be the answer: keep it
+            }
+        }
+        return lo;                 // lo == hi: the first index &gt;= target
+    }
+};</code></pre><h4>How fast</h4><p>Time O(log n), space O(1).</p><h4>Watch out</h4><ul><li>Notice the differences from Binary Search: <b>hi = n</b>, <b>lo &lt; hi</b>, and <b>hi = mid</b> (not mid − 1). Learn this one version well; it solves most "find the first ..." problems.</li><li>The one-liner: <b>return lower_bound(nums.begin(), nums.end(), target) - nums.begin();</b></li></ul></article>
+<article class="card" id="p18"><div class="eyebrow">#18 · Medium · Binary search on the answer</div><h3><a href="https://leetcode.com/problems/koko-eating-bananas/" target="_blank" rel="noopener">Koko Eating Bananas</a></h3><h4>In plain words</h4><p>There are piles of bananas and h hours. Each hour Koko picks one pile and eats up to k bananas from it (if the pile has fewer, she finishes it and waits for the next hour). Find the <b>smallest</b> speed k that lets her finish everything within h hours. Example: piles [3, 6, 7, 11], h = 8 → 4.</p><h4>How to think about it</h4><p>You aren't searching a list here; you're searching for the answer itself. Speeds go from 1 to the biggest pile. If speed k is fast enough, every faster speed is too. So the speeds look like: no, no, no, YES, yes, yes. Binary search finds the first YES. To test one speed k: a pile of p takes ceil(p / k) hours; add those up and compare with h.</p><h4>Steps</h4><ol><li>lo = 1, hi = largest pile (eating that fast always finishes in n hours).</li><li>While lo &lt; hi: try k = middle. Count the hours at speed k.</li><li>If hours ≤ h, k works, but maybe a slower one does too: hi = k. Otherwise k is too slow: lo = k + 1.</li><li>Return lo.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int minEatingSpeed(vector&lt;int&gt;&amp; piles, int h) {
+        int lo = 1;
+        int hi = *max_element(piles.begin(), piles.end());  // biggest pile
+
+        while (lo &lt; hi) {
+            int k = lo + (hi - lo) / 2;      // the speed we&#x27;re testing
+
+            // Total hours at speed k. long long because it can get big.
+            long long hours = 0;
+            for (int p : piles) {
+                hours += (p + k - 1) / k;    // = p / k rounded up
+            }
+
+            if (hours &lt;= h) hi = k;          // fast enough: try slower
+            else lo = k + 1;                 // too slow: must go faster
+        }
+        return lo;                           // the slowest speed that works
+    }
+};</code></pre><h4>How fast</h4><p>Time O(n log m), where m is the biggest pile: about 30 guesses, each one a pass over the piles. Space O(1).</p><h4>Watch out</h4><ul><li><b>(p + k − 1) / k</b> is the integer trick for rounding up. 7 bananas at speed 3: (7 + 2) / 3 = 3 hours.</li><li><b>*max_element(...)</b> returns an iterator; the * reads the value it points to.</li><li>Look for this pattern whenever a problem says "find the minimum X such that ..." and bigger X always works.</li></ul></article>
+<article class="card" id="p19"><div class="eyebrow">#19 · Medium · Sort, then sweep</div><h3><a href="https://leetcode.com/problems/merge-intervals/" target="_blank" rel="noopener">Merge Intervals</a></h3><h4>In plain words</h4><p>Each interval is [start, end]. Merge every group of overlapping intervals into one. Example: [[1,3],[2,6],[8,10],[15,18]] → [[1,6],[8,10],[15,18]], because [1,3] and [2,6] overlap.</p><h4>How to think about it</h4><p>Sort the intervals by their start. Now overlapping ones are next to each other. Walk through them with an answer list: if the current interval starts after the last merged one ends, it's separate, so add it. Otherwise it overlaps, so stretch the last merged interval's end to cover it.</p><h4>Steps</h4><ol><li>Sort the intervals (a vector of vectors sorts by the first number, then the second).</li><li>For each interval cur: if the answer is empty or answer.back()[1] &lt; cur[0], push cur.</li><li>Else set answer.back()[1] = max(answer.back()[1], cur[1]).</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    vector&lt;vector&lt;int&gt;&gt; merge(vector&lt;vector&lt;int&gt;&gt;&amp; intervals) {
+        sort(intervals.begin(), intervals.end());   // by start time
+
+        vector&lt;vector&lt;int&gt;&gt; merged;
+        for (auto&amp; cur : intervals) {
+            // No overlap: the last merged interval ends before cur starts
+            if (merged.empty() || merged.back()[1] &lt; cur[0]) {
+                merged.push_back(cur);
+            } else {
+                // Overlap: extend the last one. max() handles an interval
+                // completely inside another, like [1,10] then [2,3].
+                merged.back()[1] = max(merged.back()[1], cur[1]);
+            }
+        }
+        return merged;
+    }
+};</code></pre><h4>How fast</h4><p>Time O(n log n) for the sort, then O(n). Space O(n) for the answer.</p><h4>Watch out</h4><ul><li><b>.back()</b> is the last element of a vector. merged.back()[1] is the end of the last merged interval.</li><li>[1,4] and [4,5] count as overlapping here (they touch), which is why the test is &lt; and not ≤.</li></ul></article>
+<article class="card" id="p20"><div class="eyebrow">#20 · Medium · Greedy: sort by end</div><h3><a href="https://leetcode.com/problems/non-overlapping-intervals/" target="_blank" rel="noopener">Non-overlapping Intervals</a></h3><h4>In plain words</h4><p>Return the <b>fewest</b> intervals you must remove so the rest don't overlap. Touching is allowed: [1,2] and [2,3] don't overlap. Example: [[1,2],[2,3],[3,4],[1,3]] → 1 (remove [1,3]).</p><h4>How to think about it</h4><p>Flip the question: keep as many intervals as possible. The greedy rule that works is to always keep the interval that <b>ends earliest</b>, because it leaves the most room for the rest. So sort by end time, keep the first, then keep each next interval only if it starts at or after the end of the last one you kept. Everything you skip is a removal.</p><h4>Steps</h4><ol><li>Sort by end time (use a custom comparison).</li><li>lastEnd = end of the first interval; removed = 0.</li><li>For each following interval: if its start ≥ lastEnd, keep it (lastEnd = its end). Otherwise removed++.</li><li>Return removed.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int eraseOverlapIntervals(vector&lt;vector&lt;int&gt;&gt;&amp; intervals) {
+        // Sort by END time. The lambda says &quot;a goes before b if a ends first&quot;.
+        sort(intervals.begin(), intervals.end(),
+             [](const vector&lt;int&gt;&amp; a, const vector&lt;int&gt;&amp; b) {
+                 return a[1] &lt; b[1];
+             });
+
+        int removed = 0;
+        int lastEnd = intervals[0][1];          // we keep the first one
+
+        for (int i = 1; i &lt; (int)intervals.size(); i++) {
+            if (intervals[i][0] &gt;= lastEnd) {
+                lastEnd = intervals[i][1];      // no overlap: keep it
+            } else {
+                removed++;                      // overlaps: remove it
+            }
+        }
+        return removed;
+    }
+};</code></pre><h4>How fast</h4><p>Time O(n log n), space O(1) extra (apart from the sort).</p><h4>Watch out</h4><ul><li>The <b>[](...) { ... }</b> part is a <b>lambda</b>: a small unnamed function you pass to sort to say how to compare two items. It must return true when a should come before b.</li><li>Sorting by start instead of end gives wrong answers on cases like [[1,100],[2,3],[4,5]].</li></ul></article>
+<article class="card" id="p21"><div class="eyebrow">#21 · Easy · Writing a class</div><h3><a href="https://leetcode.com/problems/design-parking-system/" target="_blank" rel="noopener">Design Parking System</a></h3><h4>In plain words</h4><p>Write a class for a car park with a fixed number of big, medium and small spaces. <b>addCar(carType)</b> (1 = big, 2 = medium, 3 = small) parks the car and returns true if a space of that size is free, otherwise returns false.</p><h4>How to think about it</h4><p>The class just needs to remember how many spaces of each size are left. Store the three counts in an array, filled in by the constructor. addCar checks the right slot: if it's above 0, take one and return true.</p><h4>Steps</h4><ol><li>Private member: <b>int spaces[4]</b> (use slots 1–3 so carType can be the index directly).</li><li>Constructor: copy big, medium, small into slots 1, 2, 3.</li><li>addCar: if spaces[carType] &gt; 0, decrease it and return true; else return false.</li></ol><h4>The code</h4><pre><code>class ParkingSystem {
+private:
+    // spaces[1] = big, spaces[2] = medium, spaces[3] = small.
+    // Slot 0 is unused so carType can be used as the index directly.
+    int spaces[4];
+
+public:
+    // Constructor: runs once when the car park is created
+    ParkingSystem(int big, int medium, int small) {
+        spaces[0] = 0;
+        spaces[1] = big;
+        spaces[2] = medium;
+        spaces[3] = small;
+    }
+
+    bool addCar(int carType) {
+        if (spaces[carType] &gt; 0) {
+            spaces[carType]--;     // take a space
+            return true;
+        }
+        return false;              // that size is full
+    }
+};</code></pre><h4>How fast</h4><p>Each addCar is O(1). Space O(1).</p><h4>Watch out</h4><ul><li>Data the object remembers goes in <b>private:</b>. Functions people call go in <b>public:</b>.</li><li>A constructor has the same name as the class and no return type.</li></ul></article>
+<article class="card" id="p22"><div class="eyebrow">#22 · Medium · Binary search on a condition · Mini-test 3</div><h3><a href="https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/" target="_blank" rel="noopener">Find Minimum in Rotated Sorted Array</a></h3><h4>In plain words</h4><p>A sorted list was "rotated": some of the front moved to the back, e.g. [0,1,2,4,5,6,7] became [4,5,6,7,0,1,2]. All values are different. Find the smallest value in O(log n).</p><p class="muted">Do this one timed. Open one hint, try again, then open the next.</p><details class="hint"><summary>Hint 1</summary><p>The list is two sorted runs: [4,5,6,7] then [0,1,2]. The minimum is where the second run starts.</p></details><details class="hint"><summary>Hint 2</summary><p>Compare nums[mid] with nums[hi] (the last element of the range). If nums[mid] &gt; nums[hi], the drop is to the right of mid.</p></details><details class="hint"><summary>Hint 3</summary><p>Otherwise mid could be the minimum, so keep it: hi = mid. Use the lo &lt; hi template from Search Insert Position.</p></details><details class="answer"><summary>Show the full walkthrough</summary><h4>How to think about it</h4><p>Binary search, but the question at mid is "is mid in the left (bigger) run?". If nums[mid] &gt; nums[hi], yes, so the minimum is after mid. If not, mid is in the right run, so the minimum is mid or before it.</p><h4>The code</h4><pre><code>class Solution {
+public:
+    int findMin(vector&lt;int&gt;&amp; nums) {
+        int lo = 0, hi = (int)nums.size() - 1;
+
+        while (lo &lt; hi) {
+            int mid = lo + (hi - lo) / 2;
+            if (nums[mid] &gt; nums[hi]) {
+                // mid is in the left, bigger run: the drop is after mid
+                lo = mid + 1;
+            } else {
+                // mid is in the right, smaller run: min is mid or earlier
+                hi = mid;
+            }
+        }
+        return nums[lo];       // lo == hi: the smallest value
+    }
+};</code></pre><h4>How fast</h4><p>Time O(log n), space O(1).</p><h4>Watch out</h4><ul><li>Compare with nums[hi], not nums[lo]. Comparing with nums[lo] fails when the list isn't rotated at all, like [1,2,3].</li></ul></details></article>
+<article class="card" id="p23"><div class="eyebrow">#23 · Medium · Writing a class · Mini-test 3</div><h3>Library class (custom)</h3><h4>In plain words</h4><p>Write a class Library with: <b>addBook(id, title, author, year)</b>; <b>removeBook(id)</b> returning false if the id isn't there; <b>findByAuthor(author)</b> returning titles sorted by year, then title A to Z; and <b>countPublishedAfter(year)</b>, counting books with a year strictly greater. The full spec and the test calls are in the practice tests doc.</p><p class="muted">Do this one timed. Open one hint, try again, then open the next.</p><details class="hint"><summary>Hint 1</summary><p>Store books in an <b>unordered_map&lt;int, Book&gt;</b> keyed by id, so removeBook is O(1). Book can be a small struct.</p></details><details class="hint"><summary>Hint 2</summary><p>findByAuthor: collect the matching books into a vector, sort with a lambda comparing (year, title), then copy out the titles.</p></details><details class="hint"><summary>Hint 3</summary><p>countPublishedAfter: loop over the map and count. O(n) is fine; say out loud how you'd make it faster if asked.</p></details><details class="answer"><summary>Show the full walkthrough</summary><h4>How to think about it</h4><p>A map from id to Book makes add and remove O(1). The two queries loop over all books, which is O(n) and fine for this size. Sorting with a lambda handles "by year, then by title".</p><h4>The code</h4><pre><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+struct Book {              // a struct is a class whose members are public
+    string title;
+    string author;
+    int year;
+};
+
+class Library {
+private:
+    unordered_map&lt;int, Book&gt; books;          // id -&gt; Book
+
+public:
+    void addBook(int id, string title, string author, int year) {
+        books[id] = {title, author, year};   // ids are unique
+    }
+
+    bool removeBook(int id) {
+        // erase(key) returns how many it removed: 1 or 0
+        return books.erase(id) == 1;
+    }
+
+    vector&lt;string&gt; findByAuthor(string author) {
+        vector&lt;Book&gt; mine;
+        for (auto&amp; [id, b] : books) {
+            if (b.author == author) mine.push_back(b);
+        }
+        // Oldest first; if two have the same year, A to Z by title
+        sort(mine.begin(), mine.end(), [](const Book&amp; a, const Book&amp; b) {
+            if (a.year != b.year) return a.year &lt; b.year;
+            return a.title &lt; b.title;
+        });
+        vector&lt;string&gt; titles;
+        for (auto&amp; b : mine) titles.push_back(b.title);
+        return titles;
+    }
+
+    int countPublishedAfter(int year) {
+        int count = 0;
+        for (auto&amp; [id, b] : books) {
+            if (b.year &gt; year) count++;      // strictly greater
+        }
+        return count;
+    }
+};
+
+int main() {
+    Library lib;
+    lib.addBook(1, &quot;Dune&quot;, &quot;Herbert&quot;, 1965);
+    lib.addBook(2, &quot;Emma&quot;, &quot;Austen&quot;, 1815);
+    lib.addBook(3, &quot;Persuasion&quot;, &quot;Austen&quot;, 1817);
+    lib.addBook(4, &quot;Children of Dune&quot;, &quot;Herbert&quot;, 1976);
+
+    for (auto&amp; t : lib.findByAuthor(&quot;Austen&quot;)) cout &lt;&lt; t &lt;&lt; &#x27;\n&#x27;;
+    cout &lt;&lt; lib.countPublishedAfter(1900) &lt;&lt; &#x27;\n&#x27;;   // 2
+    cout &lt;&lt; boolalpha &lt;&lt; lib.removeBook(1) &lt;&lt; &#x27;\n&#x27;;  // true
+    cout &lt;&lt; lib.removeBook(1) &lt;&lt; &#x27;\n&#x27;;               // false
+    cout &lt;&lt; lib.countPublishedAfter(1900) &lt;&lt; &#x27;\n&#x27;;   // 1
+    return 0;
+}</code></pre><h4>How fast</h4><p>addBook and removeBook O(1). findByAuthor O(n + m log m), where m is that author's books. countPublishedAfter O(n).</p><h4>Watch out</h4><ul><li><b>boolalpha</b> makes cout print true/false instead of 1/0.</li><li>Follow-up answers: to make countPublishedAfter fast, keep a <b>map&lt;int, int&gt;</b> of year → count, or a sorted vector of years plus upper_bound, giving O(log n). To make findByAuthor fast, also keep <b>unordered_map&lt;string, set&lt;pair&lt;int, string&gt;&gt;&gt;</b> from author to (year, title), which is always sorted.</li></ul></details></article>
+<h2 id="night4">Night 4 · Sun 8 Nov · Dynamic programming + full mock</h2><p class="jump"><a href="#p24">24. Climbing Stairs</a> · <a href="#p25">25. Min Cost Climbing Stairs</a> · <a href="#p26">26. House Robber</a> · <a href="#p27">27. Coin Change</a> · <a href="#p28">28. Unique Paths</a> · <a href="#p29">29. Ransom Note</a> · <a href="#p30">30. Number of Provinces</a> · <a href="#p31">31. Longest Increasing Subsequence</a></p>
+<article class="card" id="p24"><div class="eyebrow">#24 · Easy · DP: count the ways</div><h3><a href="https://leetcode.com/problems/climbing-stairs/" target="_blank" rel="noopener">Climbing Stairs</a></h3><h4>In plain words</h4><p>There are n steps. Each move you climb 1 or 2 steps. How many different ways can you reach the top? Example: n = 3 → 3 (1+1+1, 1+2, 2+1).</p><h4>How to think about it</h4><p>This is the gentlest DP problem. Think about the <b>last</b> move. To stand on step i, you came either from step i−1 (a 1-step) or from step i−2 (a 2-step). So ways(i) = ways(i−1) + ways(i−2). Fill that in from the bottom. You only ever need the previous two values, so two variables are enough.</p><h4>Steps</h4><ol><li>State: ways(i) = number of ways to reach step i.</li><li>Base: ways(1) = 1, ways(2) = 2.</li><li>Transition: ways(i) = ways(i−1) + ways(i−2).</li><li>Answer: ways(n).</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int climbStairs(int n) {
+        if (n &lt;= 2) return n;          // 1 step: 1 way; 2 steps: 2 ways
+
+        int twoBack = 1;               // ways to reach step i-2 (step 1)
+        int oneBack = 2;               // ways to reach step i-1 (step 2)
+
+        for (int i = 3; i &lt;= n; i++) {
+            int current = oneBack + twoBack;   // came from i-1 or i-2
+            twoBack = oneBack;                 // slide the window forward
+            oneBack = current;
+        }
+        return oneBack;                // ways to reach step n
+    }
+};</code></pre><h4>Walk through the example</h4><div class="tw"><table><thead><tr><th>step i</th><th>ways</th><th>how</th></tr></thead><tbody><tr><td>1</td><td>1</td><td>base</td></tr><tr><td>2</td><td>2</td><td>base</td></tr><tr><td>3</td><td>3</td><td>2 + 1</td></tr><tr><td>4</td><td>5</td><td>3 + 2</td></tr><tr><td>5</td><td>8</td><td>5 + 3</td></tr></tbody></table></div><h4>How fast</h4><p>Time O(n), space O(1).</p><h4>Watch out</h4><ul><li>This is the Fibonacci sequence. Recognising "answer = sum of the previous two" is most of the battle.</li><li>If two variables feel confusing, write it with a full <b>vector&lt;int&gt; dp(n + 1)</b> first. That's perfectly fine in an interview.</li></ul></article>
+<article class="card" id="p25"><div class="eyebrow">#25 · Easy · DP: minimum cost</div><h3><a href="https://leetcode.com/problems/min-cost-climbing-stairs/" target="_blank" rel="noopener">Min Cost Climbing Stairs</a></h3><h4>In plain words</h4><p>cost[i] is what you pay to step <b>on</b> step i. You can start on step 0 or 1, and each move goes up 1 or 2. The top is just past the last step. Return the cheapest total. Example: cost = [10, 15, 20] → 15 (start on step 1, pay 15, jump 2 to the top).</p><h4>How to think about it</h4><p>Same shape as Climbing Stairs, but instead of adding the ways you take the cheaper option. dp[i] = the cheapest total to stand on step i = cost[i] + the cheaper of dp[i−1] and dp[i−2]. The top can be reached from either of the last two steps, so the answer is the smaller of those two.</p><h4>Steps</h4><ol><li>dp[0] = cost[0], dp[1] = cost[1] (you can start on either).</li><li>For i ≥ 2: dp[i] = cost[i] + min(dp[i−1], dp[i−2]).</li><li>Answer: min(dp[n−1], dp[n−2]).</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int minCostClimbingStairs(vector&lt;int&gt;&amp; cost) {
+        int n = cost.size();
+        // dp[i] = cheapest total to be standing on step i
+        vector&lt;int&gt; dp(n);
+        dp[0] = cost[0];               // start on step 0
+        dp[1] = cost[1];               // or start on step 1
+
+        for (int i = 2; i &lt; n; i++) {
+            // Came from one step below or two steps below; take the cheaper
+            dp[i] = cost[i] + min(dp[i - 1], dp[i - 2]);
+        }
+        // The top is reached from the last step or the one before it
+        return min(dp[n - 1], dp[n - 2]);
+    }
+};</code></pre><h4>How fast</h4><p>Time O(n), space O(n). It can be O(1) with two variables, like Climbing Stairs.</p><h4>Watch out</h4><ul><li>The top is <b>not</b> step n−1, it's one past it. That's why the answer is a min of the last two.</li></ul></article>
+<article class="card" id="p26"><div class="eyebrow">#26 · Medium · DP: take or skip</div><h3><a href="https://leetcode.com/problems/house-robber/" target="_blank" rel="noopener">House Robber</a></h3><h4>In plain words</h4><p>Houses in a row hold nums[i] money. You can't rob two houses next to each other. Return the most money you can get. Example: [2, 7, 9, 3, 1] → 12 (houses 0, 2 and 4: 2 + 9 + 1).</p><h4>How to think about it</h4><p>At each house you choose: <b>rob it</b> (then you couldn't rob the previous one, so add it to the best up to two houses back) or <b>skip it</b> (keep the best up to the previous house). best(i) = max(best(i−1), best(i−2) + nums[i]). Like Climbing Stairs, you only need the last two values.</p><h4>Steps</h4><ol><li>State: best(i) = most money from houses 0..i.</li><li>Transition: max(skip = best(i−1), rob = best(i−2) + nums[i]).</li><li>Start with both "previous" values at 0 and walk through the houses.</li><li>Answer: best of the last house.</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int rob(vector&lt;int&gt;&amp; nums) {
+        int twoBack = 0;   // best total up to the house two before this one
+        int oneBack = 0;   // best total up to the previous house
+
+        for (int money : nums) {
+            int robIt  = twoBack + money;   // rob this: previous must be safe
+            int skipIt = oneBack;           // skip this: keep previous best
+            int best = max(robIt, skipIt);
+
+            twoBack = oneBack;              // move forward one house
+            oneBack = best;
+        }
+        return oneBack;
+    }
+};</code></pre><h4>Walk through the example</h4><div class="tw"><table><thead><tr><th>house</th><th>money</th><th>rob it</th><th>skip it</th><th>best</th></tr></thead><tbody><tr><td>0</td><td>2</td><td>0+2=2</td><td>0</td><td>2</td></tr><tr><td>1</td><td>7</td><td>0+7=7</td><td>2</td><td>7</td></tr><tr><td>2</td><td>9</td><td>2+9=11</td><td>7</td><td>11</td></tr><tr><td>3</td><td>3</td><td>7+3=10</td><td>11</td><td>11</td></tr><tr><td>4</td><td>1</td><td>11+1=12</td><td>11</td><td>12</td></tr></tbody></table></div><h4>How fast</h4><p>Time O(n), space O(1).</p><h4>Watch out</h4><ul><li>Starting both variables at 0 handles the first house and a list with one house without special cases.</li></ul></article>
+<article class="card" id="p27"><div class="eyebrow">#27 · Medium · DP: minimum over choices</div><h3><a href="https://leetcode.com/problems/coin-change/" target="_blank" rel="noopener">Coin Change</a></h3><h4>In plain words</h4><p>Given coin values (unlimited of each) and an <b>amount</b>, return the fewest coins that add up to exactly the amount, or −1 if it can't be done. Example: coins [1, 2, 5], amount 11 → 3 (5 + 5 + 1).</p><h4>How to think about it</h4><p>Build up answers for every amount from 0 to the target. dp[a] = fewest coins to make a. To make a, the last coin you used was some coin c, so you needed dp[a − c] coins before it, plus 1. Try every coin and take the smallest. Amounts you can't make stay at a big "impossible" value.</p><h4>Steps</h4><ol><li>dp has amount + 1 slots, all set to a huge number (impossible). dp[0] = 0 (zero coins make 0).</li><li>For a = 1 to amount, for each coin c ≤ a: if dp[a − c] is possible, dp[a] = min(dp[a], dp[a − c] + 1).</li><li>If dp[amount] is still huge, return −1, else dp[amount].</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int coinChange(vector&lt;int&gt;&amp; coins, int amount) {
+        const int IMPOSSIBLE = amount + 1;   // more coins than could ever
+                                             // be needed, so it means &quot;can&#x27;t&quot;
+        // dp[a] = fewest coins to make amount a
+        vector&lt;int&gt; dp(amount + 1, IMPOSSIBLE);
+        dp[0] = 0;                           // 0 needs no coins
+
+        for (int a = 1; a &lt;= amount; a++) {
+            for (int c : coins) {
+                if (c &lt;= a &amp;&amp; dp[a - c] != IMPOSSIBLE) {
+                    // Use coin c last: make (a - c), then add this coin
+                    dp[a] = min(dp[a], dp[a - c] + 1);
+                }
+            }
+        }
+        return dp[amount] == IMPOSSIBLE ? -1 : dp[amount];
+    }
+};</code></pre><h4>How fast</h4><p>Time O(amount × number of coins). Space O(amount).</p><h4>Watch out</h4><ul><li>Greedy (always take the biggest coin) is wrong. Coins [1, 3, 4], amount 6: greedy gives 4+1+1 = 3 coins, but 3+3 = 2 coins.</li><li>Using amount + 1 as "impossible" instead of INT_MAX avoids overflow when you add 1 to it.</li><li><b>x ? y : z</b> means "if x then y else z".</li></ul></article>
+<article class="card" id="p28"><div class="eyebrow">#28 · Medium · DP on a grid</div><h3><a href="https://leetcode.com/problems/unique-paths/" target="_blank" rel="noopener">Unique Paths</a></h3><h4>In plain words</h4><p>A robot starts at the top-left of an m × n grid and can only move <b>right</b> or <b>down</b>. How many different paths reach the bottom-right? Example: m = 3, n = 7 → 28.</p><h4>How to think about it</h4><p>To reach a cell, the robot came from the cell above or the cell to the left. So paths(r, c) = paths(r−1, c) + paths(r, c−1). Every cell in the top row and the left column has exactly 1 path (keep going straight). Fill the grid row by row.</p><h4>Steps</h4><ol><li>Make an m × n grid filled with 1 (this covers the top row and left column).</li><li>For r from 1 and c from 1: dp[r][c] = dp[r−1][c] + dp[r][c−1].</li><li>Answer: dp[m−1][n−1].</li></ol><h4>The code</h4><pre><code>class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        // dp[r][c] = number of paths to reach (r, c).
+        // Start everything at 1: the top row and left column only have one
+        // path each (all right, or all down).
+        vector&lt;vector&lt;int&gt;&gt; dp(m, vector&lt;int&gt;(n, 1));
+
+        for (int r = 1; r &lt; m; r++) {
+            for (int c = 1; c &lt; n; c++) {
+                // Arrived from above or from the left
+                dp[r][c] = dp[r - 1][c] + dp[r][c - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+};</code></pre><h4>How fast</h4><p>Time O(m × n), space O(m × n). One row is enough if you want O(n) space.</p><h4>Watch out</h4><ul><li><b>vector&lt;vector&lt;int&gt;&gt; dp(m, vector&lt;int&gt;(n, 1))</b> reads as: m rows, each row is n ints set to 1.</li></ul></article>
+<article class="card" id="p29"><div class="eyebrow">#29 · Easy · Counting · Mock</div><h3><a href="https://leetcode.com/problems/ransom-note/" target="_blank" rel="noopener">Ransom Note</a></h3><h4>In plain words</h4><p>Can you build the string <b>ransomNote</b> by cutting letters out of <b>magazine</b>? Each magazine letter can be used once. Lowercase letters only. Example: "aa" from "aab" → true; "aa" from "ab" → false.</p><p class="muted">Do this one timed. Open one hint, try again, then open the next.</p><details class="hint"><summary>Hint 1</summary><p>Same counting trick as Valid Anagram: an array of 26 counters.</p></details><details class="hint"><summary>Hint 2</summary><p>Count the magazine's letters first. Then go through the note and take letters away.</p></details><details class="hint"><summary>Hint 3</summary><p>If any counter goes below 0, the magazine didn't have enough of that letter.</p></details><details class="answer"><summary>Show the full walkthrough</summary><h4>How to think about it</h4><p>Count what the magazine offers, then spend from it for each letter in the note. Going negative means you ran out.</p><h4>The code</h4><pre><code>class Solution {
+public:
+    bool canConstruct(string ransomNote, string magazine) {
+        int have[26] = {0};
+        for (char c : magazine) have[c - &#x27;a&#x27;]++;    // letters available
+
+        for (char c : ransomNote) {
+            have[c - &#x27;a&#x27;]--;                        // use one
+            if (have[c - &#x27;a&#x27;] &lt; 0) return false;    // didn&#x27;t have enough
+        }
+        return true;
+    }
+};</code></pre><h4>How fast</h4><p>Time O(note + magazine), space O(1).</p><h4>Watch out</h4><ul><li>Count the magazine first, not the note.</li></ul></details></article>
+<article class="card" id="p30"><div class="eyebrow">#30 · Medium · Connected parts of a graph · Mock</div><h3><a href="https://leetcode.com/problems/number-of-provinces/" target="_blank" rel="noopener">Number of Provinces</a></h3><h4>In plain words</h4><p>There are n cities. isConnected[i][j] = 1 means city i and city j are directly connected. A province is a group of cities connected directly or through others. Count the provinces.</p><p class="muted">Do this one timed. Open one hint, try again, then open the next.</p><details class="hint"><summary>Hint 1</summary><p>This is Number of Islands on a graph instead of a grid.</p></details><details class="hint"><summary>Hint 2</summary><p>The neighbours of city u are every j where isConnected[u][j] == 1.</p></details><details class="hint"><summary>Hint 3</summary><p>Loop over cities; each unvisited one starts a new province. Visit everything reachable from it (DFS), then carry on.</p></details><details class="answer"><summary>Show the full walkthrough</summary><h4>How to think about it</h4><p>Count connected components. For each city not yet visited, add 1 and visit everything you can reach from it.</p><h4>The code</h4><pre><code>class Solution {
+public:
+    int findCircleNum(vector&lt;vector&lt;int&gt;&gt;&amp; isConnected) {
+        int n = isConnected.size();
+        vector&lt;bool&gt; visited(n, false);
+        int provinces = 0;
+
+        for (int i = 0; i &lt; n; i++) {
+            if (!visited[i]) {          // a city in a new province
+                provinces++;
+                visit(isConnected, visited, i);
+            }
+        }
+        return provinces;
+    }
+
+private:
+    // Mark u and every city reachable from it as visited
+    void visit(vector&lt;vector&lt;int&gt;&gt;&amp; g, vector&lt;bool&gt;&amp; visited, int u) {
+        visited[u] = true;
+        for (int v = 0; v &lt; (int)g.size(); v++) {
+            if (g[u][v] == 1 &amp;&amp; !visited[v]) {
+                visit(g, visited, v);
+            }
+        }
+    }
+};</code></pre><h4>How fast</h4><p>Time O(n²): the matrix has n² entries. Space O(n).</p><h4>Watch out</h4><ul><li>Pass <b>visited</b> by reference (&amp;). Without the &amp;, each call gets its own copy and the marks are lost.</li></ul></details></article>
+<article class="card" id="p31"><div class="eyebrow">#31 · Medium · DP: best ending here · Mock</div><h3><a href="https://leetcode.com/problems/longest-increasing-subsequence/" target="_blank" rel="noopener">Longest Increasing Subsequence</a></h3><h4>In plain words</h4><p>Return the length of the longest <b>strictly increasing</b> subsequence. A subsequence keeps the order but can skip elements. Example: [10, 9, 2, 5, 3, 7, 101, 18] → 4 (2, 3, 7, 101).</p><p class="muted">Do this one timed. Open one hint, try again, then open the next.</p><details class="hint"><summary>Hint 1</summary><p>State: dp[i] = length of the longest increasing subsequence that <b>ends at index i</b>.</p></details><details class="hint"><summary>Hint 2</summary><p>To end at i, the previous element is some j &lt; i with nums[j] &lt; nums[i]. So dp[i] = 1 + the biggest such dp[j] (or just 1 if there's none).</p></details><details class="hint"><summary>Hint 3</summary><p>The answer is the largest value anywhere in dp, not necessarily dp[n − 1].</p></details><details class="answer"><summary>Show the full walkthrough</summary><h4>How to think about it</h4><p>For each position, look back at every earlier, smaller element and extend the best run ending there. Two loops, O(n²), which is enough for n ≤ 2,500.</p><h4>The code</h4><pre><code>class Solution {
+public:
+    int lengthOfLIS(vector&lt;int&gt;&amp; nums) {
+        int n = nums.size();
+        // dp[i] = longest increasing subsequence that ENDS at index i.
+        // Every element alone is a subsequence of length 1.
+        vector&lt;int&gt; dp(n, 1);
+        int best = 1;
+
+        for (int i = 1; i &lt; n; i++) {
+            for (int j = 0; j &lt; i; j++) {
+                if (nums[j] &lt; nums[i]) {
+                    // Put nums[i] after the best run that ends at j
+                    dp[i] = max(dp[i], dp[j] + 1);
+                }
+            }
+            best = max(best, dp[i]);
+        }
+        return best;
+    }
+};</code></pre><h4>How fast</h4><p>Time O(n²), space O(n).</p><h4>Watch out</h4><ul><li>Follow-up for O(n log n): keep a vector <b>tails</b>; for each x, lower_bound it in tails and replace that element (or push_back if x is bigger than all). The answer is tails.size().</li></ul></details></article>
+<p class="totop"><a href="#">Back to top</a></p>
+</main>
+<script>
+(function(){
+  var b=document.getElementById("theme"), r=document.documentElement;
+  function paint(){var d=r.getAttribute("data-theme")==="dark";b.textContent=d?"☀ Light":"☾ Dark";b.setAttribute("aria-label",d?"Switch to light mode":"Switch to dark mode");}
+  b.addEventListener("click",function(){var n=r.getAttribute("data-theme")==="dark"?"light":"dark";r.setAttribute("data-theme",n);try{localStorage.setItem("studyhub-theme",n)}catch(e){}paint();});
+  paint();
+})();
+</script>
+</body>
+</html>
