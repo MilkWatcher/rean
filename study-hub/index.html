@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<style>img{max-width:100%}</style>
+<title>Reanielle's Study Hub</title>
+<style>
+/* Layout: same tabs and columns; every block sits in a plain cream container on a warm paper ground. Light only. */
+:root{
+  --bg:#f7f3ea; --box:#fffdf8; --ink:#25221c; --muted:#7a7262; --line:#e6dfd0; --link:#2f5a94; --hover:#f3eee2;
+  --f-body:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono:ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#0a0a0b; --box:#131315; --ink:#e8e8ea; --muted:#9a9aa0; --line:#26262a; --link:#8399ff; --hover:#1c1c20;
+  color-scheme:dark;
+}
+body,.top,.card,.btn,.day{transition:background-color .2s ease,border-color .2s ease,color .2s ease}
+@media (prefers-reduced-motion:reduce){body,.top,.card,.btn,.day{transition:none}}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:var(--link);text-underline-offset:2px}
+h1,h2,h3{font-weight:600;text-wrap:balance;margin:0;line-height:1.3}
+h2{font-size:1.15rem}
+h3{font-size:1rem}
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.muted{color:var(--muted)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.dot{display:none}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 20px;padding-block:12px}
+.brand{font-weight:600;font-size:1.02rem;letter-spacing:-.01em;margin-right:auto;min-width:0}
+.brand small{display:block;font:400 .75rem/1.3 var(--f-mono);color:var(--muted)}
+nav{display:flex;gap:16px;overflow-x:auto;max-width:100%;min-width:0}
+.right{display:flex;align-items:baseline;gap:18px;min-width:0;max-width:100%}
+.theme{appearance:none;font:400 .8rem var(--f-mono);color:var(--muted);background:var(--box);border:1px solid var(--line);border-radius:999px;padding:4px 11px;cursor:pointer;white-space:nowrap}
+.theme:hover{color:var(--ink);border-color:var(--muted)}
+@media (max-width:560px){.right{width:100%;justify-content:space-between}}
+nav a{color:var(--muted);text-decoration:none;white-space:nowrap;padding-block:2px;border-bottom:1px solid transparent}
+nav a:hover{color:var(--ink)}
+nav a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--ink)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+
+main{padding-block:20px 48px}
+.view{display:grid;gap:16px}
+.card{min-width:0;background:var(--box);border:1px solid var(--line);border-radius:8px;padding:16px 18px}
+.eyebrow{font:400 .72rem/1.4 var(--f-mono);color:var(--muted);margin-bottom:6px;letter-spacing:.02em}
+.card > h2,.card > h3{margin-bottom:6px}
+.tick:hover .what{color:var(--ink)}
+.card{box-shadow:0 1px 0 rgba(60,45,20,.03)}
+
+/* today */
+.today-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;align-items:start}
+.side{display:grid;gap:16px}
+@media (max-width:820px){.today-grid{grid-template-columns:1fr}}
+.tonight h2{font-size:1.25rem;margin-bottom:4px}
+.tonight .sub{color:var(--muted);margin:0 0 10px}
+.count{display:flex;gap:18px;margin:4px 0 6px}
+.count b{font:500 1.4rem/1 var(--f-mono);font-variant-numeric:tabular-nums}
+.count span{font:400 .75rem var(--f-mono);color:var(--muted);margin-left:3px}
+.agenda{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.agenda li{display:grid;grid-template-columns:84px 1fr;gap:10px;align-items:baseline}
+.agenda .d{font:400 .8rem/1.4 var(--f-mono);color:var(--muted)}
+.bar{height:3px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;background:var(--ink);opacity:.55}
+.prog{display:grid;gap:10px}
+.prog .row div:first-child{display:flex;justify-content:space-between;gap:8px;font-size:.92rem}
+
+/* ticks */
+.ticks{list-style:none;margin:0;padding:0;display:grid}
+.ticks li{border-top:1px solid var(--line)}
+.ticks li:first-child{border-top:0}
+.tick{display:grid;grid-template-columns:20px 1fr auto;gap:10px;align-items:start;padding:8px 0;cursor:pointer}
+.tick input{width:16px;height:16px;margin:3px 0 0;accent-color:var(--ink);cursor:pointer}
+.tick .what b{font-weight:600}
+.tick .mins{font:400 .78rem/1.7 var(--f-mono);color:var(--muted);white-space:nowrap}
+.tick input:checked ~ .what{color:var(--muted);text-decoration:line-through}
+.tick input:disabled{cursor:default}
+.badge{font:400 .75rem var(--f-mono);color:var(--muted)}
+
+/* calendar */
+.legend{font-size:.85rem;color:var(--muted);padding-inline:2px}
+.legend span+span::before{content:" · "}
+.cal-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:820px){.cal-wrap{grid-template-columns:1fr}}
+.month h3{margin-bottom:8px}
+.grid7{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.dow{font:400 .7rem/1 var(--f-mono);color:var(--muted);padding:6px 4px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.day{appearance:none;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0;background:var(--box);color:var(--ink);min-height:54px;padding:4px;text-align:left;display:flex;flex-direction:column;gap:2px;cursor:pointer;font:inherit;min-width:0}
+.day:hover{background:var(--hover)}
+.day.blank{cursor:default}
+.day.blank:hover{background:var(--box)}
+.day .n{font:400 .78rem/1 var(--f-mono)}
+.day .c{font:400 .66rem/1.25 var(--f-mono);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.day .c.k-cram,.day .c.k-test{color:var(--ink)}
+.day .c.k-test{font-weight:600}
+.day.is-today{background:var(--hover)}
+.day.is-today .n{font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.day.is-sel{background:var(--hover)}
+.day.past{color:var(--muted)}
+
+/* plan */
+.card .two{gap:4px 32px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:820px){.two{grid-template-columns:1fr}}
+.sched{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;vertical-align:top;padding:7px 10px 7px 0;border-bottom:1px solid var(--line)}
+th{font:400 .75rem var(--f-mono);color:var(--muted)}
+td.time{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--muted)}
+tr.brk td{color:var(--muted)}
+details{border-top:1px solid var(--line);padding-block:8px}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";font-family:var(--f-mono);color:var(--muted);width:1ch}
+details[open] summary::before{content:"−"}
+summary .cnt{margin-left:auto;font:400 .78rem var(--f-mono);color:var(--muted)}
+
+/* docs */
+.docs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+@media (max-width:820px){.docs{grid-template-columns:1fr}}
+.btns{display:grid;gap:8px;margin-top:10px}
+.btn{background:var(--bg);display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:9px 12px;border:1px solid var(--line);border-radius:6px;color:var(--ink);text-decoration:none}
+.btn:hover{background:var(--hover);border-color:var(--muted)}
+.btn::after{content:"↗";color:var(--muted);font-size:.85rem;margin-left:-4px}
+.btn span{margin-left:auto}
+.btn span{font:400 .72rem var(--f-mono);color:var(--muted)}
+.note{font-size:.82rem;color:var(--muted);margin:8px 0 0}
+.res{columns:3 200px;column-gap:28px;margin:8px 0 0;padding:0;list-style:none}
+.res li{break-inside:avoid;padding:3px 0}
+
+.status{font:400 .75rem/1.4 var(--f-mono);color:var(--muted)}
+footer .wrap{padding-block:0 32px}
+</style>
+<script>try{if(localStorage.getItem("studyhub-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");else document.documentElement.setAttribute("data-theme","light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">Study Hub<small id="clock">Dublin time</small></div>
+    <div class="right">
+    <nav aria-label="Sections">
+      <a href="#today" data-v="today">Today</a>
+      <a href="#calendar" data-v="calendar">Calendar</a>
+      <a href="#plan" data-v="plan">Plans &amp; checklists</a>
+      <a href="#docs" data-v="docs">Documents</a>
+    </nav>
+    <button type="button" class="theme" id="theme" aria-label="Switch to dark mode">☾ Dark</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="view" id="v-today" aria-label="Today">
+    <div class="today-grid">
+      <div class="card tonight" id="tonight"></div>
+      <div class="side">
+        <div class="card k-cram" id="countdown"></div>
+        <div class="card">
+          <div class="eyebrow">Coming up</div>
+          <ul class="agenda" id="upnext"></ul>
+        </div>
+        <div class="card">
+          <div class="eyebrow">Progress</div>
+          <div class="prog" id="prog"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="v-calendar" aria-label="Calendar" hidden>
+    <div class="legend">
+      <span>Tap a day to see its tasks</span><span>N = cram night</span><span>W = week (+ = long Saturday session)</span><span>Today is underlined</span>
+    </div>
+    <div class="cal-wrap" id="cal"></div>
+    <div class="card" id="daydetail"></div>
+  </section>
+
+  <section class="view" id="v-plan" aria-label="Plans and checklists" hidden></section>
+
+  <section class="view" id="v-docs" aria-label="Documents" hidden></section>
+</main>
+
+<footer><div class="wrap"><p class="status" id="status">Loading your ticks…</p></div></footer>
+
+<script>
+(function(){
+"use strict";
+const TZ = "Europe/Dublin";
+const DEADLINE = Date.parse("2026-11-10T08:15:00Z"); // 08:15 Irish time (UTC+0 in November)
+const LC = s => "https://leetcode.com/problems/" + s + "/";
+const GD = id => "https://docs.google.com/document/d/" + id + "/edit";
+const GS = id => "https://docs.google.com/spreadsheets/d/" + id + "/edit";
+const a = (t, u) => '<a href="' + u + '" target="_blank" rel="noopener">' + t + '</a>';
+const mono = t => '<span class="mono">' + t + '</span>';
+
+const DOC = {
+  cramNotes: GD("1_nRVJ1dK71LYTXUCe_5ykXXOBaxYqpc2tH_bFMoBIU8"),
+  cramTests: GD("1pZgSwJA3AodOZ57NYbRauy0bEDhnIh9eFtk33iuPLOQ"),
+  tracker:   GS("1mHkhpF6tz6iqQhf9PCBGXw3QJxN-knsysUBfucED72g"),
+  langNotes: GD("10nN6fnwciquAgcppRSLU5QSGF0m6H7Hhi_1w7n5IC7A"),
+  plan:      GD("1qc2TzT9Y1EO-Xm259_Zw1bYBCDKeOvmn5o9rA_PO1qs")
+};
+
+const SLUG = {
+  "Two Sum":"two-sum","Contains Duplicate":"contains-duplicate","Valid Anagram":"valid-anagram",
+  "Group Anagrams":"group-anagrams","Top K Frequent Elements":"top-k-frequent-elements",
+  "Longest Substring Without Repeating Characters":"longest-substring-without-repeating-characters",
+  "Longest Consecutive Sequence":"longest-consecutive-sequence","Flood Fill":"flood-fill",
+  "Number of Islands":"number-of-islands","Max Area of Island":"max-area-of-island",
+  "Rotting Oranges":"rotting-oranges","Shortest Path in Binary Matrix":"shortest-path-in-binary-matrix",
+  "Find if Path Exists in Graph":"find-if-path-exists-in-graph","Course Schedule":"course-schedule",
+  "Binary Search":"binary-search","Search Insert Position":"search-insert-position",
+  "Koko Eating Bananas":"koko-eating-bananas","Merge Intervals":"merge-intervals",
+  "Non-overlapping Intervals":"non-overlapping-intervals","Design Parking System":"design-parking-system",
+  "Find Minimum in Rotated Sorted Array":"find-minimum-in-rotated-sorted-array",
+  "Climbing Stairs":"climbing-stairs","Min Cost Climbing Stairs":"min-cost-climbing-stairs",
+  "House Robber":"house-robber","Coin Change":"coin-change","Unique Paths":"unique-paths",
+  "Ransom Note":"ransom-note","Number of Provinces":"number-of-provinces",
+  "Longest Increasing Subsequence":"longest-increasing-subsequence","Valid Parentheses":"valid-parentheses"
+};
+function linkProblems(text){
+  return text.split(/(, | \+ )/).map(p => SLUG[p] ? a(p, LC(SLUG[p])) : (/\(custom\)/.test(p) ? a(p, DOC.cramTests) : p)).join("");
+}
+
+/* ---------- Susquehanna cram ---------- */
+const NIGHTS = [
+  {n:1, date:"2026-11-05", label:"Thu 5 Nov", focus:"Arrays, hash maps, sliding window", blocks:[
+    ["Notes",15,"Read 'Test-day rules' and Night 1 notes"],
+    ["Platform check",15,"Do a free HackerRank sample test: learn the editor, Run vs Submit, reading input"],
+    ["Guided practice",35,"Two Sum, Contains Duplicate, Valid Anagram",1],
+    ["Guided practice",50,"Group Anagrams, Top K Frequent Elements, Longest Substring Without Repeating Characters",1],
+    ["Mini-test 1 (timed)",40,"Longest Consecutive Sequence + Frequency Leader (custom)",1],
+    ["Log and review",10,"Fill in the tracker's problem log and mark anything to redo"]]},
+  {n:2, date:"2026-11-06", label:"Fri 6 Nov", focus:"Graphs: BFS and DFS", blocks:[
+    ["Notes",15,"Read Night 2 notes; type the grid BFS template once from memory"],
+    ["Redo",15,"Redo one problem marked 'Redo' from Night 1"],
+    ["Guided practice",35,"Flood Fill, Number of Islands",1],
+    ["Guided practice",55,"Max Area of Island, Rotting Oranges, Shortest Path in Binary Matrix",1],
+    ["Mini-test 2 (timed)",40,"Find if Path Exists in Graph + Course Schedule",1],
+    ["Log and review",10,"Fill in the tracker's problem log and mark anything to redo"]]},
+  {n:3, date:"2026-11-07", label:"Sat 7 Nov", focus:"Binary search, intervals, writing a class", blocks:[
+    ["Notes",15,"Read Night 3 notes"],
+    ["Guided practice",40,"Binary Search, Search Insert Position, Koko Eating Bananas",1],
+    ["Guided practice",30,"Merge Intervals, Non-overlapping Intervals",1],
+    ["Guided practice",10,"Design Parking System",1],
+    ["Mini-test 3 (timed)",45,"Find Minimum in Rotated Sorted Array + Library class (custom)",1],
+    ["Log and review",10,"Fill in the tracker's problem log and mark anything to redo"]]},
+  {n:4, date:"2026-11-08", label:"Sun 8 Nov", focus:"Dynamic programming + full mock", blocks:[
+    ["Notes",15,"Read Night 4 notes (the DP recipe)"],
+    ["Guided practice",30,"Climbing Stairs, Min Cost Climbing Stairs, House Robber",1],
+    ["Guided practice",30,"Coin Change, Unique Paths",1],
+    ["Full mock (timed)",70,"Ransom Note + Number of Provinces + Longest Increasing Subsequence",1],
+    ["Log and review",15,"Fill in the tracker; compare the mock to the targets"]]},
+  {n:5, date:"2026-11-09", label:"Mon 9 Nov", focus:"Test night", blocks:[
+    ["Warm-up",25,"Redo two problems marked 'Redo' (no new topics)"],
+    ["Template drill",10,"Type BFS, lower-bound binary search and a DP loop from memory"],
+    ["Checklist",5,"Go through the pre-test checklist in the notes"],
+    ["Real test",70,"Susquehanna assessment. Start by 8 PM. Deadline 08:15 Tuesday, Irish time"],
+    ["Log",10,"Write down what was asked and how it went"]]}
+];
+NIGHTS.forEach(nt => nt.items = nt.blocks.map((b,i) => ({
+  k:"n"+nt.n+"-b"+i, mins:b[1], html:"<b>"+b[0]+"</b> · "+(b[3] ? linkProblems(b[2]) : b[2])
+})));
+
+/* ---------- Day 1 ---------- */
+const DAY1_DATE = "2026-11-14";
+const DAY1 = [
+  ["09:00–09:20","Set-up","Install Python 3.12+ and VS Code with the Python extension. Create and clone the "+mono("lang-practice")+" repo on GitHub. Check that "+mono("python3")+", "+mono("java")+" and "+mono("g++")+" all run."],
+  ["09:20–10:30","Python basics",a("Python tutorial","https://docs.python.org/3/tutorial/")+" sections 3–5. Type every example. Then sections 1, 2 and 4 of the "+a("side-by-side notes",DOC.langNotes)+"."],
+  ["10:30–10:45","Break",""],
+  ["10:45–12:15","Python collections","Type and run the \"Python collections in practice\" block (notes section 3). First 5 learning exercises on the "+a("Exercism Python track","https://exercism.org/tracks/python")+"."],
+  ["12:15–13:00","Lunch",""],
+  ["13:00–14:30","Re-solve in Python","12 minutes each: "+["Two Sum","Contains Duplicate","Valid Anagram","Group Anagrams","Top K Frequent Elements","Valid Parentheses","Number of Islands"].map(p=>a(p,LC(SLUG[p]))).join(", ")+". Check against notes section 5."],
+  ["14:30–14:45","Break",""],
+  ["14:45–16:00","Python classes and testing","Python tutorial section 9 up to 9.7. Write the Library class and its two tests from memory; run "+mono("python3 -m pytest")+" until green."],
+  ["16:00–17:00","Java refresh","Java gotchas and the Java columns in notes sections 2, 3 and 6. Two Sum and Valid Parentheses in Java, then Library with a record and a stream."],
+  ["17:00–17:45","Dinner",""],
+  ["17:45–19:15","C++ depth",a("learncpp","https://www.learncpp.com/")+" lessons 22.1–22.5 (move semantics, smart pointers). Type MyVector from memory (notes section 7) and push 100 strings into it."],
+  ["19:15–20:00","Git",a("Learn Git Branching","https://learngitbranching.js.org/")+": the whole Introduction Sequence. Commit and push today's work."],
+  ["20:00–20:15","Review","Write three things that tripped you up in "+mono("LOG.md")+". Tick the checklist."]
+];
+const DAY1_CHECKS = [
+  "All three compilers/interpreters run on my machine",
+  "7 problems solved in Python",
+  "Library class + 2 pytest tests passing",
+  "Two Sum + Valid Parentheses + Library in Java",
+  "MyVector typed from memory and compiles",
+  "Introduction Sequence done on Learn Git Branching; code pushed"
+].map((h,i) => ({k:"d1-c"+i, html:h}));
+
+/* ---------- 4 weeks ---------- */
+const NEET = a("NeetCode","https://neetcode.io/roadmap");
+const CS50P = a("CS50P","https://cs50.harvard.edu/python/");
+const WEEKS = [
+  {w:1, start:"2026-11-16", title:"Python until it feels natural", items:[
+    CS50P+": watch lectures 0–2 (Functions and Variables, Conditionals, Loops) at 1.5× speed",
+    "CS50P: problem sets 0, 1 and 2",
+    NEET+": the Arrays &amp; Hashing section, all in Python",
+    a("Exercism Python","https://exercism.org/tracks/python")+": 10 more exercises",
+    "Weekend: CS50P lectures 3 and 4 (Exceptions, Libraries) and problem sets 3 and 4",
+    "Every session ends with a commit"]},
+  {w:2, start:"2026-11-23", title:"Python testing, SQL and Git", items:[
+    "CS50P lecture 5 (Unit Tests) and problem set 5",
+    "CS50P lectures 6 and 8 (File I/O, OOP) and problem sets 6 and 8",
+    a("SQLBolt","https://sqlbolt.com/")+": lessons 1–12",
+    a("Learn Git Branching","https://learngitbranching.js.org/")+": Ramping Up (Main tab) and Push &amp; Pull (Remote tab)",
+    a("Pro Git","https://git-scm.com/book/en/v2")+": chapters 2 and 3",
+    NEET+": Two Pointers and Stack sections in Python"]},
+  {w:3, start:"2026-11-30", title:"Modern Java", items:[
+    a("Helsinki Java MOOC","https://java-programming.mooc.fi/")+": skim Parts 1–7, do the exercises you can't do instantly",
+    "Java MOOC: Parts 8–12 properly, with exercises",
+    a("dev.java/learn","https://dev.java/learn/")+": Records, the Collections Framework, Lambdas/Streams",
+    a("JUnit 5 user guide","https://junit.org/junit5/docs/current/user-guide/")+": Writing Tests; test the Library class",
+    NEET+": Sliding Window and Binary Search sections in Java",
+    a("Exercism Java","https://exercism.org/tracks/java")+": 5 exercises"]},
+  {w:4, start:"2026-12-07", title:"C++ depth and a portfolio project", items:[
+    a("learncpp","https://www.learncpp.com/")+": chapters 14–16, lesson 18.3, lessons 20.6–20.7 and the rest of chapter 22",
+    "Add copy constructor and copy assignment to MyVector (rule of five); test it",
+    a("GoogleTest primer","https://google.github.io/googletest/primer.html")+": write 3 tests for MyVector",
+    NEET+": Trees and Heap / Priority Queue sections in C++",
+    "<b>Portfolio:</b> port the Ranked Catan rating engine to Python with pytest tests and a README; pin it on GitHub",
+    "Add the project to your CV under Projects"]}
+];
+WEEKS.forEach(wk => wk.checks = wk.items.map((h,i) => ({k:"w"+wk.w+"-c"+i, html:h})));
+
+const COMFORT = [
+  ["Python",["Pick list / dict / set / deque / heapq / Counter for a problem and say why","List comprehensions, f-strings, enumerate and zip without thinking","Write a dataclass and test it with pytest","Explain the mutable-default-argument and list-aliasing gotchas"]],
+  ["Java",["HashMap, ArrayList, ArrayDeque and PriorityQueue with generics","A record, sorted with Comparator.comparing(...).thenComparing(...)","Filter / map / collect with a stream","Why == on Strings and Integers is wrong; when equals and hashCode go together"]],
+  ["C++",["A class with a constructor, const member functions and operator overloading","vector, unordered_map, map, priority_queue, and sort with a lambda","RAII, unique_ptr vs shared_ptr, and what std::move actually does","MyVector::push_back from scratch, and why it's amortised O(1)"]],
+  ["Tools",["Branch, commit, merge and open a pull request on GitHub","A SELECT with a JOIN, GROUP BY and HAVING","One pinned portfolio project with tests and a README"]]
+].map(([g,list]) => ({g, checks:list.map((h,i) => ({k:"cf-"+g.replace(/\W/g,"").toLowerCase()+"-"+i, html:h}))}));
+
+/* ---------- dates ---------- */
+const fmtISO = new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit"});
+const todayISO = () => fmtISO.format(new Date());
+const parse = s => { const [y,m,d] = s.split("-").map(Number); return new Date(Date.UTC(y,m-1,d)); };
+const iso = d => d.toISOString().slice(0,10);
+const addDays = (s,n) => { const d = parse(s); d.setUTCDate(d.getUTCDate()+n); return iso(d); };
+const dow = s => parse(s).getUTCDay(); // 0 Sun
+const DOWS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const short = s => { const d = parse(s); return DOWS[d.getUTCDay()]+" "+d.getUTCDate()+" "+MONTHS[d.getUTCMonth()]; };
+const diffDays = (a1,b1) => Math.round((parse(b1)-parse(a1))/864e5);
+
+function agendaFor(s){
+  const out = [];
+  const nt = NIGHTS.find(x => x.date === s);
+  if (nt) out.push({kind: nt.n === 5 ? "test" : "cram", chip: nt.n === 5 ? "Test" : "N"+nt.n,
+    title: nt.n === 5 ? "Test night: Susquehanna assessment" : "Cram night "+nt.n+": "+nt.focus, night: nt});
+  if (s === "2026-11-10") out.push({kind:"test", chip:"Due", title:"Assessment deadline, 08:15 Irish time"});
+  if (s === DAY1_DATE) out.push({kind:"day1", chip:"Day 1", title:"Day 1: full study day (Python, Java, C++, Git)", day1:true});
+  const d0 = diffDays("2026-11-16", s);
+  if (d0 >= 0 && d0 < 28){
+    const wk = WEEKS[Math.floor(d0/7)], wd = dow(s);
+    if (wd >= 1 && wd <= 4) out.push({kind:"week", chip:"W"+wk.w, title:"Week "+wk.w+" evening (90 min): "+wk.title, week:wk});
+    else if (wd === 6) out.push({kind:"week", chip:"W"+wk.w+"+", title:"Week "+wk.w+" weekend session (3–4 h): "+wk.title, week:wk});
+    else out.push({kind:"rest", chip:"Rest", title:"Rest day (week "+wk.w+")", week:wk});
+  }
+  if (d0 >= 28){
+    const wd = dow(s), lang = {1:"Python",3:"Java",5:"C++"}[wd];
+    if (lang) out.push({kind:"warm", chip:lang, title:"Keep warm: one NeetCode problem in "+lang});
+  }
+  if (!out.length && s > "2026-11-09" && s < "2026-11-16") out.push({kind:"rest", chip:"Rest", title: s === "2026-11-15" ? "Rest before week 1" : "Rest after the test"});
+  return out;
+}
+
+/* ---------- tick store ---------- */
+let ticks = {}, mode = "local", readOnly = false, col = null;
+const LS_KEY = "studyhub-ticks";
+try { ticks = JSON.parse(localStorage.getItem(LS_KEY) || "{}") || {}; } catch(e) { ticks = {}; }
+const chains = {};
+const statusEl = document.getElementById("status");
+function setStatus(t){ statusEl.textContent = t; }
+
+function tickHTML(item, scope){
+  const id = "t-"+scope+"-"+item.k;
+  return '<li><label class="tick" for="'+id+'"><input type="checkbox" id="'+id+'" data-k="'+item.k+'"'+(ticks[item.k]?" checked":"")+(readOnly?" disabled":"")+'><span class="what">'+item.html+'</span>'+(item.mins?'<span class="mins">'+item.mins+' min</span>':'<span></span>')+'</label></li>';
+}
+function ticksHTML(items, scope){ return '<ul class="ticks">'+items.map(i => tickHTML(i, scope)).join("")+'</ul>'; }
+function syncInputs(){
+  document.querySelectorAll("input[data-k]").forEach(el => { el.checked = !!ticks[el.dataset.k]; el.disabled = readOnly; });
+  document.querySelectorAll("[data-count]").forEach(el => {
+    const keys = el.dataset.count.split(",");
+    el.textContent = keys.filter(k => ticks[k]).length + " / " + keys.length;
+  });
+  renderProgress();
+}
+function save(k, v){
+  if (v) ticks[k] = true; else delete ticks[k];
+  syncInputs();
+  if (mode === "local"){ try { localStorage.setItem(LS_KEY, JSON.stringify(ticks)); } catch(e){} return; }
+  chains[k] = (chains[k] || Promise.resolve()).then(() => col.doc(k).set({done: v})).catch(err => {
+    if (err && err.code === "invalid_argument"){ readOnly = true; syncInputs(); setStatus("You can view this hub, but your ticks can't be saved here."); }
+    else setStatus("Couldn't save that tick. Check your connection and try again.");
+  });
+}
+document.addEventListener("change", e => {
+  const el = e.target;
+  if (el.matches && el.matches("input[data-k]")) save(el.dataset.k, el.checked);
+});
+
+/* ---------- progress ---------- */
+function groups(){
+  return [
+    {label:"Susquehanna cram", cls:"k-cram", keys:NIGHTS.flatMap(n => n.items.map(i => i.k))},
+    {label:"Day 1", cls:"k-day1", keys:DAY1_CHECKS.map(i => i.k)},
+    ...WEEKS.map(w => ({label:"Week "+w.w, cls:"k-week", keys:w.checks.map(i => i.k)})),
+    {label:"Comfortable with the stack", cls:"k-week", keys:COMFORT.flatMap(g => g.checks.map(i => i.k))}
+  ];
+}
+function renderProgress(){
+  const el = document.getElementById("prog");
+  el.innerHTML = groups().map(g => {
+    const d = g.keys.filter(k => ticks[k]).length, pct = Math.round(100*d/g.keys.length);
+    return '<div class="row '+g.cls+'"><div><span>'+g.label+'</span><span class="mono muted">'+d+' / '+g.keys.length+'</span></div><div class="bar"><i style="width:'+pct+'%"></i></div></div>';
+  }).join("");
+}
+
+/* ---------- today ---------- */
+function renderToday(){
+  const t = todayISO();
+  const ag = agendaFor(t);
+  const el = document.getElementById("tonight");
+  let h = "";
+  const main = ag[0];
+  if (!main){
+    h = '<div class="eyebrow">'+short(t)+'</div><h2>Nothing scheduled today</h2><p class="sub">Check the calendar for what\'s next.</p>';
+  } else if (main.night){
+    const nt = main.night, tot = nt.blocks.reduce((s,b) => s+b[1], 0);
+    h = '<div class="eyebrow k-cram"><i class="dot"></i>Tonight · '+nt.label+' · '+tot+' min</div><h2>'+(nt.n===5?"Test night":"Night "+nt.n+": "+nt.focus)+'</h2>'
+      + '<p class="sub">Notes in the '+a("cram notes",DOC.cramNotes)+', problems and hints in the '+a("practice tests",DOC.cramTests)+', and log results in the '+a("tracker",DOC.tracker)+'.</p>'
+      + ticksHTML(nt.items, "today");
+  } else if (main.day1){
+    h = '<div class="eyebrow k-day1"><i class="dot"></i>Today · '+short(t)+'</div><h2>Day 1: full study day</h2><p class="sub">The hour-by-hour schedule is under '+'<a href="#plan">Plans &amp; checklists</a>. Tick these off as you go.</p>'+ticksHTML(DAY1_CHECKS,"today");
+  } else if (main.week){
+    const wk = main.week;
+    h = '<div class="eyebrow '+(main.kind==="rest"?"k-rest":"k-week")+'"><i class="dot"></i>Today · '+short(t)+'</div><h2>'+main.title+'</h2><p class="sub">'+(main.kind==="rest"?"Day off. Here's this week's list for when you're back.":"Work down this week's list from the first unticked box.")+'</p>'+ticksHTML(wk.checks,"today");
+  } else {
+    h = '<div class="eyebrow k-'+main.kind+'"><i class="dot"></i>Today · '+short(t)+'</div><h2>'+main.title+'</h2>';
+    if (main.kind === "test" && t === "2026-11-10") h += '<p class="sub">If you haven\'t submitted, do it before 08:15. After that, rest until Day 1 on Saturday 14 November.</p>';
+  }
+  el.innerHTML = h;
+
+  const up = [];
+  for (let i = 1; i < 60 && up.length < 6; i++){
+    const s = addDays(t, i);
+    agendaFor(s).filter(x => x.kind !== "rest").forEach(x => up.length < 6 && up.push([s,x]));
+  }
+  document.getElementById("upnext").innerHTML = up.map(([s,x]) =>
+    '<li><span class="d">'+short(s)+'</span><span class="t k-'+x.kind+'"><i class="dot"></i><span>'+x.title+'</span></span></li>').join("");
+}
+function renderCountdown(){
+  const el = document.getElementById("countdown");
+  const ms = DEADLINE - Date.now();
+  if (ms <= 0){
+    el.innerHTML = '<div class="eyebrow"><i class="dot"></i>Susquehanna assessment</div><h3>Deadline passed</h3><p class="muted" style="margin:6px 0 0">The test window closed at 08:15 on Tuesday 10 November. Next up: Day 1 of the learning plan.</p>';
+    return;
+  }
+  const d = Math.floor(ms/864e5), h = Math.floor(ms/36e5)%24, m = Math.floor(ms/6e4)%60;
+  el.innerHTML = '<div class="eyebrow"><i class="dot"></i>Susquehanna assessment closes</div>'
+    + '<div class="count"><div><b>'+d+'</b><span>days</span></div><div><b>'+h+'</b><span>hours</span></div><div><b>'+String(m).padStart(2,"0")+'</b><span>min</span></div></div>'
+    + '<p class="muted" style="margin:0;font-size:.88rem">Tue 10 Nov, 08:15 Irish time. Aim to sit it Monday evening.</p>';
+}
+const clockFmt = new Intl.DateTimeFormat("en-IE",{timeZone:TZ,weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+function tick(){ document.getElementById("clock").textContent = clockFmt.format(new Date())+" · Dublin"; renderCountdown(); }
+
+/* ---------- calendar ---------- */
+let selDay = todayISO();
+function renderCalendar(){
+  const t = todayISO();
+  const months = [[2026,10],[2026,11]];
+  document.getElementById("cal").innerHTML = months.map(([y,m]) => {
+    const first = new Date(Date.UTC(y,m,1)), days = new Date(Date.UTC(y,m+1,0)).getUTCDate();
+    const lead = (first.getUTCDay()+6)%7;
+    let cells = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(d => '<div class="dow">'+d+'</div>').join("");
+    for (let i=0;i<lead;i++) cells += '<div class="day blank" aria-hidden="true"></div>';
+    for (let d=1; d<=days; d++){
+      const s = iso(new Date(Date.UTC(y,m,d))), ag = agendaFor(s);
+      const cls = ["day"]; if (s===t) cls.push("is-today"); if (s===selDay) cls.push("is-sel"); if (s<t) cls.push("past");
+      cells += '<button type="button" class="'+cls.join(" ")+'" data-day="'+s+'" aria-label="'+short(s)+(ag.length?": "+ag.map(x=>x.title).join("; "):"")+'"><span class="n">'+d+'</span>'
+        + ag.map(x => '<span class="c k-'+x.kind+'">'+x.chip+'</span>').join("")+'</button>';
+    }
+    return '<div class="card month"><h3>'+["November","December"][m-10]+' '+y+'</h3><div class="grid7">'+cells+'</div></div>';
+  }).join("");
+  renderDayDetail();
+}
+function renderDayDetail(){
+  const ag = agendaFor(selDay), el = document.getElementById("daydetail");
+  let h = '<div class="eyebrow">'+short(selDay)+(selDay===todayISO()?" · today":"")+'</div>';
+  if (!ag.length) h += '<h3>Nothing planned</h3>';
+  ag.forEach(x => {
+    h += '<h3 class="k-'+x.kind+'" style="margin-bottom:8px"><span class="badge">'+x.chip+'</span> '+x.title+'</h3>';
+    if (x.night) h += ticksHTML(x.night.items, "cal");
+    else if (x.day1) h += ticksHTML(DAY1_CHECKS, "cal");
+    else if (x.week && x.kind !== "rest") h += ticksHTML(x.week.checks, "cal");
+  });
+  el.innerHTML = h;
+}
+document.getElementById("cal").addEventListener("click", e => {
+  const b = e.target.closest("[data-day]"); if (!b) return;
+  selDay = b.dataset.day; renderCalendar();
+  document.getElementById("daydetail").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"nearest"});
+});
+
+/* ---------- plan ---------- */
+function renderPlan(){
+  const cramKeys = nt => nt.items.map(i=>i.k).join(",");
+  let h = '<div class="card k-cram"><div class="eyebrow"><i class="dot"></i>Phase 1 · Thu 5 – Mon 9 Nov</div><h2 style="margin-bottom:6px">Susquehanna cram</h2>'
+    + '<p class="muted" style="margin:0 0 10px">Night study only. Full notes in the '+a("cram notes",DOC.cramNotes)+'; log every problem in the '+a("tracker",DOC.tracker)+'.</p>';
+  NIGHTS.forEach(nt => {
+    h += '<details'+(nt.date===todayISO()?" open":"")+'><summary><b>'+nt.label+'</b><span>'+(nt.n===5?"Test night":"Night "+nt.n+": "+nt.focus)+'</span><span class="cnt" data-count="'+cramKeys(nt)+'"></span></summary>'+ticksHTML(nt.items,"plan")+'</details>';
+  });
+  h += '</div>';
+
+  h += '<div class="card k-day1"><div class="eyebrow"><i class="dot"></i>Phase 2 · Sat 14 Nov (or your first full day off)</div><h2 style="margin-bottom:10px">Day 1: the full day</h2><div class="sched"><table><thead><tr><th>Time</th><th>Block</th><th>What to do</th></tr></thead><tbody>'
+    + DAY1.map(r => '<tr'+(r[2]?"":' class="brk"')+'><td class="time">'+r[0]+'</td><td><b>'+r[1]+'</b></td><td>'+r[2]+'</td></tr>').join("")
+    + '</tbody></table></div><h3 style="margin:16px 0 4px">Day 1 checklist <span class="mono muted" style="font-size:.8rem" data-count="'+DAY1_CHECKS.map(i=>i.k).join(",")+'"></span></h3>'+ticksHTML(DAY1_CHECKS,"plan")+'</div>';
+
+  h += '<div class="card k-week"><div class="eyebrow"><i class="dot"></i>Phase 3 · 16 Nov – 13 Dec</div><h2 style="margin-bottom:4px">The 4-week evening roadmap</h2><p class="muted" style="margin:0 0 4px">Monday to Thursday: about 90 minutes each evening. Saturday: one 3–4 hour session. Friday and Sunday off.</p></div><div class="two">';
+  WEEKS.forEach(wk => {
+    h += '<div class="card k-week"><div class="eyebrow"><i class="dot"></i>Week '+wk.w+' · '+short(wk.start)+' – '+short(addDays(wk.start,6))+'</div><h3 style="margin-bottom:4px">'+wk.title+' <span class="mono muted" style="font-size:.8rem;font-weight:400" data-count="'+wk.checks.map(i=>i.k).join(",")+'"></span></h3>'+ticksHTML(wk.checks,"plan")+'</div>';
+  });
+  h += '</div>';
+
+  h += '<div class="card"><div class="eyebrow">After week 4</div><h2 style="margin-bottom:10px">How you\'ll know you\'re comfortable</h2><p class="muted" style="margin:0 0 6px">Tick these only when you can do them without looking anything up. To keep it warm: one '+NEET+' problem on Monday (Python), Wednesday (Java) and Friday (C++).</p><div class="two">'
+    + COMFORT.map(g => '<div><h3 style="margin:10px 0 2px">'+g.g+'</h3>'+ticksHTML(g.checks,"plan")+'</div>').join("") + '</div></div>';
+  document.getElementById("v-plan").innerHTML = h;
+}
+
+/* ---------- docs ---------- */
+function renderDocs(){
+  const grp = (title, cls, eyebrow, items, note) => '<div class="card"><div class="eyebrow">'+eyebrow+'</div><h3>'+title+'</h3><div class="btns">'
+    + items.map(([t,u,kind]) => '<a class="btn" href="'+u+'" target="_blank" rel="noopener">'+t+'<span>'+kind+'</span></a>').join("")+'</div>'+(note?'<p class="note">'+note+'</p>':'')+'</div>';
+  let h = '<div class="docs">'
+    + grp("Susquehanna assessment","k-cram","Phase 1",[
+        ["Cram notes",DOC.cramNotes,"Doc","Topic notes and templates for each night, plus test-day rules"],
+        ["Practice tests",DOC.cramTests,"Doc","Mini-tests, the Sunday mock, custom problems and hints"],
+        ["Cram tracker",DOC.tracker,"Sheet"]], "Tracker tip: set File › Settings › Time zone to Dublin so \"Hours left\" is right.")
+    + grp("Learning the stack","k-week","Phases 2–3",[
+        ["Tech Stack Study Plan",DOC.plan,"Doc","Day 1 schedule, 4-week roadmap and resources (this hub mirrors it)"],
+        ["C++ / Java / Python Side-by-Side Notes",DOC.langNotes,"Doc","Syntax, collections, OOP, memory and gotchas, with tested code"]])
+    + grp("Applications","k-rest","CVs and cover letters",[
+        ["JPMorgan Chase CV",GD("1jEMTm46FwS2vLyIRpcVflFXVxAN1y9s7a-8s2gBQ-2w"),"Doc",""],
+        ["JPMorgan Chase cover letter",GD("1Ry3AShSTqGz77zyYGY5iJ3MmZTOAywv2uukw1Llp1pY"),"Doc",""],
+        ["Fidelity Leap CV",GD("1qjHXMiTbZSuWrFBi3WqUvF8USgdTJuUTMAHsnUyNCXQ"),"Doc",""],
+        ["Fidelity Leap cover letter",GD("12kRBY6mtKGqTITwcj-OIXhoYc-3otVgXz95BI4HvbME"),"Doc",""],
+        ["Susquehanna CV",GD("1wYfNjcYxSTVWoqJOQxbKbJNm3YjIarAnCmtLodr_UbE"),"Doc",""],
+        ["Susquehanna cover letter",GD("1OmTQJnRRvrCHI7th8YmmiK0vQDNjBZR-RM1l32OcN_0"),"Doc",""]])
+    + '</div>';
+  const R = [
+    ["CS50P","https://cs50.harvard.edu/python/","Python course: lectures 0–9 with problem sets"],
+    ["Python tutorial","https://docs.python.org/3/tutorial/","Official tour: sections 3–5 and 9"],
+    ["Helsinki Java MOOC","https://java-programming.mooc.fi/","Java course with auto-checked exercises: Parts 8–12"],
+    ["dev.java/learn","https://dev.java/learn/","Records, Collections, Lambdas/Streams"],
+    ["learncpp","https://www.learncpp.com/","Chapters 14–16, 18.3, 20.6–20.7, 22"],
+    ["cppreference","https://en.cppreference.com/","C++ reference for signatures and complexity"],
+    ["NeetCode roadmap","https://neetcode.io/roadmap","Interview problems by pattern, with videos"],
+    ["Exercism","https://exercism.org/tracks","Small exercises with tests: Python, Java, C++ tracks"],
+    ["Learn Git Branching","https://learngitbranching.js.org/","Interactive Git practice"],
+    ["Pro Git","https://git-scm.com/book/en/v2","Free Git book: chapters 2 and 3"],
+    ["SQLBolt","https://sqlbolt.com/","Interactive SQL: lessons 1–12"],
+    ["pytest","https://docs.pytest.org/en/stable/getting-started.html","Python testing: Get started"],
+    ["JUnit 5","https://junit.org/junit5/docs/current/user-guide/","Java testing: Writing Tests"],
+    ["GoogleTest primer","https://google.github.io/googletest/primer.html","C++ testing"],
+    ["A tour of C#","https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/","One evening if Susquehanna invites you to interview"]
+  ];
+  h += '<div class="card"><div class="eyebrow">All free</div><h3>Learning resources</h3><ul class="res">'+R.map(([t,u]) => '<li>'+a(t,u)+'</li>').join("")+'</ul></div>';
+  document.getElementById("v-docs").innerHTML = h;
+}
+
+/* ---------- routing ---------- */
+const VIEWS = ["today","calendar","plan","docs"];
+function route(){
+  const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "today";
+  VIEWS.forEach(x => document.getElementById("v-"+x).hidden = x !== v);
+  document.querySelectorAll("nav a").forEach(n => { if (n.dataset.v === v) n.setAttribute("aria-current","page"); else n.removeAttribute("aria-current"); });
+}
+window.addEventListener("hashchange", route);
+
+function renderAll(){ renderToday(); renderCalendar(); renderPlan(); renderDocs(); syncInputs(); }
+renderAll(); route(); tick();
+setInterval(tick, 30000);
+let lastDay = todayISO();
+setInterval(() => { if (todayISO() !== lastDay){ lastDay = todayISO(); renderAll(); } }, 60000);
+setStatus("Ticks are saved on this device.");
+
+const themeBtn = document.getElementById("theme");
+function paintTheme(){
+  const dark = document.documentElement.getAttribute("data-theme") === "dark";
+  themeBtn.textContent = dark ? "☀ Light" : "☾ Dark";
+  themeBtn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+}
+themeBtn.addEventListener("click", () => {
+  const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  try { localStorage.setItem("studyhub-theme", next); } catch(e) {}
+  paintTheme();
+});
+paintTheme();
+
+/* ---------- shared store ---------- */
+(async function(){
+  const c = window.claude;
+  if (!c || !c.use) return;
+  let db = null;
+  try { db = await c.use("db"); } catch(e) { db = null; }
+  if (!db) return;
+  col = db.collection("ticks");
+  mode = "db";
+  setStatus("Loading your ticks…");
+  let settled = false;
+  const timer = setTimeout(() => { if (!settled) setStatus("Can't reach your saved ticks yet. What you see may be out of date."); }, 10000);
+  col.onSnapshot(snap => {
+    const next = {};
+    snap.docs.forEach(d => { const v = d.data(); if (v && v.done) next[d.id] = true; });
+    ticks = next; syncInputs();
+    if (!snap.metadata.fromCache){ settled = true; clearTimeout(timer); if (!readOnly) setStatus("Ticks are saved to your hub and sync across your devices."); }
+  }, err => {
+    settled = true; clearTimeout(timer);
+    setStatus("Your saved ticks couldn't be loaded. Reload the page to try again.");
+  });
+})();
+})();
+</script>
+</body>
+</html>
